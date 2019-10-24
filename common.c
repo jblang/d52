@@ -1747,8 +1747,11 @@ void dump_ascii(int adrs)
 		--asc_cnt;
 	}
 
-	putc('\'', fp);						// terminate line
-	kcnt++;
+	if (cnt)
+	{
+		putc('\'', fp);					// terminate line
+		kcnt++;
+	}
 
 	if (hexflag && cnt)					// if comment field requested...
 	{
