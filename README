@@ -1,6 +1,6 @@
 
-D52 8052 Disassembler Version 3.4.1 (includes D48 and DZ80)
-=========================================================
+D52 8052 Disassembler (includes D48 and DZ80)
+=============================================
 
 Licence: GNU General Public License version 3 (see the file COPYING).
  NOTE: As Novell and Microsoft are in violation of the GPL, this software
@@ -9,11 +9,24 @@ Licence: GNU General Public License version 3 (see the file COPYING).
  Microsoft's phony patent claims against Linux. In addition, no one who cannot
  honor ALL the requirements of GPL version 3 may distribute this software.
 
-The latest release version of D52 will always be available on 8052.com (or as
-long as Craig Steiner graciously allows me space on 8052.com--thanks Craig!).
+Maintainership Note:
+--------------------
 
-The disassemblers (with Linux and Windows binaries) are also available on my
-web site: http://home.pacbell.net/theposts.
+D52 appears to be unmaintained.  Neither of the locations named in the original
+README still exist (8052.com or http://home.pacbell.net/theposts).
+
+A mirror of the D52 homepage is at http://www.brouhaha.com/~eric/software/d52/.
+
+I checked in the d52v341.zip available there into GitHub and applied the
+following patches:
+
+  - Fix format security issue: https://src.fedoraproject.org/rpms/d52/blob/master/f/d52v341-format-security.patch
+  - Don't strip binaries: https://src.fedoraproject.org/rpms/d52/blob/master/f/d52v341-nostrip.patch
+  - Fix N directive bug: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=706728
+  - Fix T directive bug: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=706730
+
+Time permitting, I will be making additional bug fixes and adding features that
+I personally want.  I welcome pull requests from others.
 
 New Features:
 -------------
