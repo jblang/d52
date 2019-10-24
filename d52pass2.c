@@ -932,7 +932,7 @@ void dodir(FILE *fp, int adrs)
 	}
 	else if (dir < 0x80)
 	{
-		kcnt += fprintf(fp, rbname[dir].dent);
+		kcnt += fprintf(fp, "%s", rbname[dir].dent);
 		dirregs[dir] |= 1;
 	}
 	else
