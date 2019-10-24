@@ -27,15 +27,15 @@ install: d52 d48 dz80
 
 d52: $(D52OBJS)
 	$(CC) $(CFLAGS) $(D52OBJS) -o d52 $(LIBS)
-	strip d52
+	#strip d52
 
 d48: $(D48OBJS)
 	$(CC) $(CFLAGS) $(D48OBJS) -o d48 $(LIBS)
-	strip d48
+	#strip d48
 
 dz80: $(DZ80OBJS)
 	$(CC) $(CFLAGS) $(DZ80OBJS) -o dz80 $(LIBS)
-	strip dz80
+	#strip dz80
 
 $(OBJDIR)/d52.o: d52.c defs.h d52.h dispass0.c d52pass1.h d52pass2.h dispass3.c d52table.h analyze.h analyze.c analyze52.h analyze52.c common.h
 	$(CC) $(CFLAGS) -c $< -o $@
