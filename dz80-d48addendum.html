@@ -1,0 +1,140 @@
+<!doctype html public"-//w3c//dtd xhtml 1.0 Transitional//en">
+<html>
+<head>
+<title>DZ80/D48 Disassembler User's Manual</title>
+</head>
+<body>
+<a name="topofdoc"></a>
+<div align="center">
+<font size="8" color="#ff0000">
+<strong><i>DZ80/D48 Addendum to D52 Disassembler User's Manual</i></strong><br>
+</font>
+<hr>
+<font size="4" color="#000000">
+Z80 and 8048 Disassemblers for Linux and Windows<br>
+GNU General Public License Version 3<br>
+Copyright 2007 by Jeffery L. Post<br>
+&nbsp;&#106;_&#112;&#111;st &lt;&#65;T&gt; p&#97;c&#98;e&#108;l &lt;D&#79;T&gt; n&#101;t<br>
+Hosted on <a href="http://www.8052.com/users/disasm">www.8052.com</a>
+<br><br>
+Version 3.4.1 - August, 2007
+</font>
+<hr>
+</div>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 3 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+<br><br>
+The file COPYING contains the full text of the GNU General Public License, Version 3.
+<br><br>
+<i><b>NOTE: As Novell and Microsoft are in violation of the GPL, this software
+may not be distributed by either Novell or Microsoft. The same prohibition applies
+to any company that enters into an agreement with Microsoft regarding Microsoft's
+phony patent claims against Linux. In addition, no one who cannot honor ALL the
+requirements of GPL version 3 may distribute this software.</b></i>
+<hr>
+<br><br>
+<i>
+This documentation contains information regarding the differences between D52,
+DZ80 and D48. Please see the D52 documentation (d52manual.html) for a description
+of the features common to all three disassemblers.
+</i>
+<br><br>
+<hr>
+
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li><a href="#introduction">Introduction</a><br>
+<li><a href="#options">Command Line Options</a><br>
+<a href="#coption">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C option - disassemble CP/M file (DZ80)</a><br>
+<a href="#80option">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;80 option - disassemble 8080 code (DZ80)</a><br>
+<a href="#85option">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;85 option - disassemble 8085 code (DZ80)</a><br>
+<a href="#1option">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1 option - disassemble 8041 code (D48)</a><br>
+
+
+<li><a href="#directives">Control File Directives - define interpretation of disassembly data</a><br>
+<a href="#mdirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;M directive - define name for bit addressable memory</a><br>
+</li>
+</ul>
+<br><br>
+
+<a name="introduction"></a>
+<h4><em>Introduction</em></h4>
+<hr>
+
+DZ80 (Z80 disassembler) and D48 (8048 disassembler) are very much like the 8052
+disassembler D52. This document describes the differences between D52 and the
+Z80 and 8048 disassemblers.
+
+<br><br>
+
+<a name="options"></a>
+<h4><em>Command Line Options</em></h4>
+<hr>
+<br>
+The following D52 options do not apply to DZ80 or D48:
+<br><br>
+I option - add include pseudo-op for sfr52.inc header file.
+<br>
+K option - disassemble for Keil A51.
+<br><br>
+The T option (trace and analyze code) is still experimental in DZ80, and does
+not exist at all in D48.
+<br><br>
+
+<a name="coption"></a>
+<h4><em>C Option (disassemble CP/M .com file - DZ80)</em></h4>
+Disassembles a CP/M .com executable file beginning at address 100H.
+Use of this option will cause DZ80 to look for a file with a .com
+extension, as opposed to a .bin or .hex extension. This option also
+sets the offset to 100H without the need to do so with the -x option.
+You do not need to use the -c option if you specify a filename with
+a '.com' extension (ie: dz80 program.com). This option is compatible
+withe the -80 and -85 options.
+
+<a name="80option"></a>
+<h4><em>80 Option (disassemble 8080 code - DZ80)</em></h4>
+Disassembles code using 8080 opcodes instead of Z80 opcodes.
+
+<a name="85option"></a>
+<h4><em>85 Option (disassemble 8085 code - DZ80)</em></h4>
+Disassembles code using 8085 opcodes instead of Z80 opcodes. The only
+difference between -80 and -85 is that the 8085 has two additional
+opcodes: rim and sim, which will be treated as invalid with the -80 option.
+
+<a name="1option"></a>
+<h4><em>1 Option (disassemble 8041 code - D48)</em></h4>
+Disassembles code using 8041 opcodes instead of 8048 opcodes. (Note that
+this is the digit 1, not the letter L.)
+
+<a name="directives"></a>
+<h4><em>Control File Directives</em></h4>
+<hr>
+<br>
+The following control file directives do not apply to DZ80 or D48:
+<br><br>
+F directive - modify SFR name.<br>
+K directive - modify SFR bit name.<br>
+M directive - modify memory location name (different meaning in D48).<br>
+R directive - modify register name (used in D48, but not DZ80).<br>
+
+<a name="mdirective"></a>
+<h4><em>M Directive (force memory bank selection - D48)</em></h4>
+
+Forces code to be disassembled as if a sel mb0 or sel mb1 instruction had been
+encountered, regardless of the actual state of the memory bank selection.
+
+<br><br>
+<a href="#topofdoc">Back to top</a><br>
+<br><br><br><br>
+</body>
+</html>

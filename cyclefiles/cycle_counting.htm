@@ -1,0 +1,666 @@
+<html xmlns:v="urn:schemas-microsoft-com:vml"
+xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1250">
+<meta name=ProgId content=Word.Document>
+<meta name=Generator content="Microsoft Word 11">
+<meta name=Originator content="Microsoft Word 11">
+<link rel=File-List href="cycle_counting.files/filelist.xml">
+<title>Cycle Counting for D52</title>
+<!--[if gte mso 9]><xml>
+ <o:DocumentProperties>
+  <o:Author>ala</o:Author>
+  <o:LastAuthor>ala</o:LastAuthor>
+  <o:Revision>2</o:Revision>
+  <o:TotalTime>3</o:TotalTime>
+  <o:LastPrinted>1601-01-01T00:02:05Z</o:LastPrinted>
+  <o:Created>2007-02-25T22:51:00Z</o:Created>
+  <o:LastSaved>2007-02-25T22:51:00Z</o:LastSaved>
+  <o:Pages>3</o:Pages>
+  <o:Words>865</o:Words>
+  <o:Characters>4933</o:Characters>
+  <o:Lines>41</o:Lines>
+  <o:Paragraphs>11</o:Paragraphs>
+  <o:CharactersWithSpaces>5787</o:CharactersWithSpaces>
+  <o:Version>11.5606</o:Version>
+ </o:DocumentProperties>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:WordDocument>
+  <w:SpellingState>Clean</w:SpellingState>
+  <w:GrammarState>Clean</w:GrammarState>
+  <w:PunctuationKerning/>
+  <w:DrawingGridHorizontalSpacing>6 pt</w:DrawingGridHorizontalSpacing>
+  <w:DrawingGridVerticalSpacing>6 pt</w:DrawingGridVerticalSpacing>
+  <w:DisplayVerticalDrawingGridEvery>0</w:DisplayVerticalDrawingGridEvery>
+  <w:UseMarginsForDrawingGridOrigin/>
+  <w:ValidateAgainstSchemas/>
+  <w:SaveIfXMLInvalid>false</w:SaveIfXMLInvalid>
+  <w:IgnoreMixedContent>false</w:IgnoreMixedContent>
+  <w:AlwaysShowPlaceholderText>false</w:AlwaysShowPlaceholderText>
+  <w:Compatibility>
+   <w:BalanceSingleByteDoubleByteWidth/>
+   <w:DoNotLeaveBackslashAlone/>
+   <w:ULTrailSpace/>
+   <w:DoNotExpandShiftReturn/>
+   <w:UsePrinterMetrics/>
+   <w:WW6BorderRules/>
+   <w:FootnoteLayoutLikeWW8/>
+   <w:ShapeLayoutLikeWW8/>
+   <w:AlignTablesRowByRow/>
+   <w:ForgetLastTabAlignment/>
+   <w:AutoSpaceLikeWord95/>
+   <w:LayoutRawTableWidth/>
+   <w:LayoutTableRowsApart/>
+   <w:UseWord97LineBreakingRules/>
+   <w:SelectEntireFieldWithStartOrEnd/>
+   <w:UseWord2002TableStyleRules/>
+  </w:Compatibility>
+  <w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel>
+ </w:WordDocument>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <w:LatentStyles DefLockedState="false" LatentStyleCount="156">
+ </w:LatentStyles>
+</xml><![endif]-->
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:StarSymbol;
+	mso-font-alt:"Arial Unicode MS";
+	mso-font-charset:2;
+	mso-generic-font-family:auto;
+	mso-font-pitch:auto;
+	mso-font-signature:0 0 0 0 0 0;}
+@font-face
+	{font-family:Verdana;
+	panose-1:2 11 6 4 3 5 4 4 2 4;
+	mso-font-charset:238;
+	mso-generic-font-family:swiss;
+	mso-font-pitch:variable;
+	mso-font-signature:536871559 0 0 0 415 0;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{mso-style-parent:"";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:none;
+	mso-hyphenate:none;
+	mso-layout-grid-align:none;
+	punctuation-wrap:simple;
+	text-autospace:none;
+	font-size:12.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-ansi-language:EN-US;}
+h1
+	{mso-style-parent:Heading;
+	mso-style-next:"Základný text";
+	margin-top:12.0pt;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:0cm;
+	text-indent:0cm;
+	mso-pagination:none;
+	page-break-after:avoid;
+	mso-outline-level:1;
+	mso-list:l0 level1 lfo1;
+	mso-hyphenate:none;
+	mso-layout-grid-align:none;
+	punctuation-wrap:simple;
+	text-autospace:none;
+	font-size:16.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:Arial;
+	mso-bidi-font-family:"Times New Roman";
+	mso-font-kerning:0pt;
+	mso-ansi-language:EN-US;
+	mso-bidi-font-weight:normal;}
+h2
+	{mso-style-parent:Heading;
+	mso-style-next:"Základný text";
+	margin-top:23.25pt;
+	margin-right:0cm;
+	margin-bottom:5.95pt;
+	margin-left:0cm;
+	text-indent:0cm;
+	mso-pagination:none;
+	page-break-after:avoid;
+	mso-outline-level:2;
+	mso-list:l0 level2 lfo1;
+	mso-hyphenate:none;
+	mso-layout-grid-align:none;
+	punctuation-wrap:simple;
+	text-autospace:none;
+	font-size:14.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:Arial;
+	mso-bidi-font-family:"Times New Roman";
+	mso-ansi-language:EN-US;
+	mso-bidi-font-weight:normal;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+h3
+	{mso-style-parent:Heading;
+	mso-style-next:"Základný text";
+	margin-top:12.0pt;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:0cm;
+	mso-pagination:none;
+	page-break-after:avoid;
+	mso-outline-level:3;
+	mso-hyphenate:none;
+	mso-layout-grid-align:none;
+	punctuation-wrap:simple;
+	text-autospace:none;
+	font-size:14.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:Arial;
+	mso-bidi-font-family:"Times New Roman";
+	mso-ansi-language:EN-US;
+	mso-bidi-font-weight:normal;}
+p.MsoList, li.MsoList, div.MsoList
+	{mso-style-parent:"Základný text";
+	margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:0cm;
+	mso-pagination:none;
+	mso-hyphenate:none;
+	mso-layout-grid-align:none;
+	punctuation-wrap:simple;
+	text-autospace:none;
+	font-size:10.0pt;
+	font-family:Verdana;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	mso-ansi-language:EN-US;}
+p.MsoBodyText, li.MsoBodyText, div.MsoBodyText
+	{margin-top:0cm;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:0cm;
+	mso-pagination:none;
+	mso-hyphenate:none;
+	mso-layout-grid-align:none;
+	punctuation-wrap:simple;
+	text-autospace:none;
+	font-size:10.0pt;
+	font-family:Verdana;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	mso-ansi-language:EN-US;}
+span.Bullets
+	{mso-style-name:Bullets;
+	mso-style-parent:"";
+	mso-ansi-font-size:9.0pt;
+	font-family:StarSymbol;
+	mso-ascii-font-family:StarSymbol;
+	mso-hansi-font-family:StarSymbol;}
+p.Heading, li.Heading, div.Heading
+	{mso-style-name:Heading;
+	mso-style-next:"Základný text";
+	margin-top:12.0pt;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:0cm;
+	mso-pagination:none;
+	page-break-after:avoid;
+	mso-hyphenate:none;
+	mso-layout-grid-align:none;
+	punctuation-wrap:simple;
+	text-autospace:none;
+	font-size:14.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:Arial;
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	mso-ansi-language:EN-US;}
+p.Caption, li.Caption, div.Caption
+	{mso-style-name:Caption;
+	margin-top:6.0pt;
+	margin-right:0cm;
+	margin-bottom:6.0pt;
+	margin-left:0cm;
+	mso-pagination:no-line-numbers;
+	mso-hyphenate:none;
+	mso-layout-grid-align:none;
+	punctuation-wrap:simple;
+	text-autospace:none;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-ansi-language:EN-US;
+	font-style:italic;
+	mso-bidi-font-style:normal;}
+p.Index, li.Index, div.Index
+	{mso-style-name:Index;
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:no-line-numbers;
+	mso-hyphenate:none;
+	mso-layout-grid-align:none;
+	punctuation-wrap:simple;
+	text-autospace:none;
+	font-size:12.0pt;
+	mso-bidi-font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-fareast-font-family:"Times New Roman";
+	mso-ansi-language:EN-US;}
+p.PreformattedText, li.PreformattedText, div.PreformattedText
+	{mso-style-name:"Preformatted Text";
+	margin:0cm;
+	margin-bottom:.0001pt;
+	mso-pagination:none;
+	mso-hyphenate:none;
+	mso-layout-grid-align:none;
+	punctuation-wrap:simple;
+	text-autospace:none;
+	font-size:10.0pt;
+	font-family:"Courier New";
+	mso-fareast-font-family:"Times New Roman";
+	mso-bidi-font-family:"Times New Roman";
+	mso-ansi-language:EN-US;}
+span.SpellE
+	{mso-style-name:"";
+	mso-spl-e:yes;}
+span.GramE
+	{mso-style-name:"";
+	mso-gram-e:yes;}
+ /* Page Definitions */
+ @page
+	{mso-footnote-position:beneath-text;}
+@page Section1
+	{size:595.25pt 841.85pt;
+	margin:2.0cm 2.0cm 2.0cm 2.0cm;
+	mso-header-margin:35.4pt;
+	mso-footer-margin:35.4pt;
+	mso-paper-source:0;}
+div.Section1
+	{page:Section1;
+	mso-footnote-position:beneath-text;}
+ /* List Definitions */
+ @list l0
+	{mso-list-id:-5;
+	mso-list-template-ids:705839466;}
+@list l0:level1
+	{mso-level-number-format:none;
+	mso-level-style-link:"Nadpis 1";
+	mso-level-suffix:none;
+	mso-level-text:"";
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:0cm;
+	text-indent:0cm;}
+@list l0:level2
+	{mso-level-number-format:none;
+	mso-level-style-link:"Nadpis 2";
+	mso-level-text:"";
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	mso-level-legacy:yes;
+	mso-level-legacy-indent:0cm;
+	mso-level-legacy-space:0cm;
+	margin-left:0cm;
+	text-indent:0cm;}
+@list l0:level3
+	{mso-level-start-at:0;
+	mso-level-number-format:none;
+	mso-level-text:"";
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:0cm;
+	text-indent:0cm;}
+@list l0:level4
+	{mso-level-start-at:0;
+	mso-level-number-format:none;
+	mso-level-text:"";
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:0cm;
+	text-indent:0cm;}
+@list l0:level5
+	{mso-level-start-at:0;
+	mso-level-number-format:none;
+	mso-level-text:"";
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:0cm;
+	text-indent:0cm;}
+@list l0:level6
+	{mso-level-start-at:0;
+	mso-level-number-format:none;
+	mso-level-text:"";
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:0cm;
+	text-indent:0cm;}
+@list l0:level7
+	{mso-level-start-at:0;
+	mso-level-number-format:none;
+	mso-level-text:"";
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:0cm;
+	text-indent:0cm;}
+@list l0:level8
+	{mso-level-start-at:0;
+	mso-level-number-format:none;
+	mso-level-text:"";
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:0cm;
+	text-indent:0cm;}
+@list l0:level9
+	{mso-level-start-at:0;
+	mso-level-number-format:none;
+	mso-level-text:"";
+	mso-level-tab-stop:none;
+	mso-level-number-position:left;
+	margin-left:0cm;
+	text-indent:0cm;}
+ol
+	{margin-bottom:0cm;}
+ul
+	{margin-bottom:0cm;}
+-->
+</style>
+<!--[if gte mso 10]>
+<style>
+ /* Style Definitions */
+ table.MsoNormalTable
+	{mso-style-name:"Normálna tabuľka";
+	mso-tstyle-rowband-size:0;
+	mso-tstyle-colband-size:0;
+	mso-style-noshow:yes;
+	mso-style-parent:"";
+	mso-padding-alt:0cm 5.4pt 0cm 5.4pt;
+	mso-para-margin:0cm;
+	mso-para-margin-bottom:.0001pt;
+	mso-pagination:widow-orphan;
+	font-size:10.0pt;
+	font-family:"Times New Roman";
+	mso-ansi-language:#0400;
+	mso-fareast-language:#0400;
+	mso-bidi-language:#0400;}
+</style>
+<![endif]--><!--[if gte mso 9]><xml>
+ <o:shapedefaults v:ext="edit" spidmax="1026"/>
+</xml><![endif]--><!--[if gte mso 9]><xml>
+ <o:shapelayout v:ext="edit">
+  <o:idmap v:ext="edit" data="1"/>
+ </o:shapelayout></xml><![endif]-->
+</head>
+
+<body lang=SK style='tab-interval:35.45pt'>
+
+<div class=Section1>
+
+<h1 align=center style='margin-top:11.9pt;margin-right:0cm;margin-bottom:0cm;
+margin-left:0cm;margin-bottom:.0001pt;text-align:center;text-indent:0cm'><span
+lang=EN-US style='font-size:18.0pt;mso-bidi-font-size:10.0pt'>Cycle Counting
+for D52<o:p></o:p></span></h1>
+
+<h1 align=center style='margin-top:0cm;margin-right:0cm;margin-bottom:5.95pt;
+margin-left:0cm;text-align:center;text-indent:0cm'><span class=GramE><span
+lang=EN-US style='font-size:12.0pt;mso-bidi-font-size:10.0pt'>and</span></span><span
+lang=EN-US style='font-size:12.0pt;mso-bidi-font-size:10.0pt'> D48 and DZ80<o:p></o:p></span></h1>
+
+<p class=MsoBodyText align=center style='text-align:center'><span class=GramE><i
+style='mso-bidi-font-style:normal'><span lang=EN-US style='font-size:8.0pt;
+mso-bidi-font-size:10.0pt'>by</span></i></span><i style='mso-bidi-font-style:
+normal'><span lang=EN-US style='font-size:8.0pt;mso-bidi-font-size:10.0pt'> Jan
+<span class=SpellE>Waclawek</span>, <span class=SpellE>wek</span> at <span
+class=SpellE>efton</span> dot <span class=SpellE>sk</span>, Feb 2007<o:p></o:p></span></i></p>
+
+<p class=MsoBodyText align=center style='text-align:center'><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
+
+<h2 style='margin-left:0cm;text-align:justify;text-indent:0cm'><span
+lang=EN-US>Some pseudo-legal stuff</span></h2>
+
+<p class=MsoBodyText style='text-align:justify'><span class=GramE><span
+lang=EN-US>Absolutely no guarantee.</span></span><span lang=EN-US> Use at your
+own risk. What else would you expect?</span></p>
+
+<h2 style='margin-left:0cm;text-align:justify;text-indent:0cm'><span
+lang=EN-US>How?</span></h2>
+
+<p class=MsoBodyText style='text-align:justify'><span lang=EN-US>Add <b
+style='mso-bidi-font-weight:normal'>Z</b> directives to the .<span
+class=SpellE>ctl</span> file, with <b style='mso-bidi-font-weight:normal'>range</b>
+for which the cycle counting has to be performed.</span></p>
+
+<p class=MsoBodyText style='text-align:justify'><span lang=EN-US>The output
+file will contain a cycle number for each instruction in the comment field, and
+a summary after end of each range.</span></p>
+
+<p class=MsoBodyText style='text-align:justify'><span lang=EN-US>Ranges for Z
+directives can be <b style='mso-bidi-font-weight:normal'>nested</b> and can be
+defined in <b style='mso-bidi-font-weight:normal'>any order</b>, but must not
+partially overlap.</span></p>
+
+<p class=MsoBodyText style='text-align:justify'><span lang=EN-US>All cycle
+counts are in given <b style='mso-bidi-font-weight:normal'>in instruction
+cycles</b>. For clock cycles, multiply by clock/instruction value.</span></p>
+
+<h2 style='margin-left:0cm;text-align:justify;text-indent:0cm'><span
+lang=EN-US>More details...</span></h2>
+
+<p class=MsoBodyText style='text-align:justify'><b style='mso-bidi-font-weight:
+normal'><span lang=EN-US>Z[range<span class=GramE>][</span>suffix[value]]<o:p></o:p></span></b></p>
+
+<p class=MsoBodyText style='text-align:justify'><b style='mso-bidi-font-weight:
+normal'><span lang=EN-US>Range</span></b><span lang=EN-US> can be defined as
+usual with other directives in .<span class=SpellE>ctl</span> files - either as
+<i style='mso-bidi-font-style:normal'>start<b style='mso-bidi-font-weight:normal'>&#8209;</b>end</i>
+or <span class=GramE>as<span style='mso-spacerun:yes'>  </span><span
+class=SpellE><i style='mso-bidi-font-style:normal'>start</i></span></span><span
+class=SpellE><b style='mso-bidi-font-weight:normal'><i style='mso-bidi-font-style:
+normal'>+</i></b><i style='mso-bidi-font-style:normal'>length</i></span><i
+style='mso-bidi-font-style:normal'>. </i>Range can also be a <b
+style='mso-bidi-font-weight:normal'>single number</b> (except where the
+&quot;-&quot; suffix is needed - <span class=GramE>see</span> known issues),
+which is equivalent to a <i style='mso-bidi-font-style:normal'>start-start</i>
+range. </span></p>
+
+<p class=MsoBodyText style='text-align:justify'><b style='mso-bidi-font-weight:
+normal'><span lang=EN-US>Suffix</span></b><span lang=EN-US> is one of:</span></p>
+
+<p class=MsoBodyText style='margin-left:20.1pt;text-align:justify;text-indent:
+-20.1pt'><b style='mso-bidi-font-weight:normal'><span lang=EN-US>*</span></b><span
+lang=EN-US> -<span style='mso-tab-count:1'> </span>the total cycle count of
+this range is multiplied by the given <i style='mso-bidi-font-style:normal'>value</i>,
+and this value will be added to the parent range cycle count. <span
+class=GramE>Useful for cycle counting in cycles.</span> See also <i
+style='mso-bidi-font-style:normal'>(auto<span class=GramE>)repeat</span></i> in
+<i style='mso-bidi-font-style:normal'>special cases</i> below.</span></p>
+
+<p class=MsoBodyText style='margin-left:20.1pt;text-align:justify;text-indent:
+-20.1pt'><b style='mso-bidi-font-weight:normal'><span lang=EN-US>-</span></b><span
+lang=EN-US> -<span style='mso-tab-count:1'>  </span>this range (including its <span
+class=SpellE>subranges</span>) will be excluded from cycle count of the parent;
+however, the total count of this range will be written to output file. No <i
+style='mso-bidi-font-style:normal'>value</i> needed. The individual
+instructions' cycle count will be suffixed by “<b style='mso-bidi-font-weight:
+normal'>-</b>” in the output file for this range. See also <i style='mso-bidi-font-style:
+normal'>taken/not taken</i> in <i style='mso-bidi-font-style:normal'>special
+cases</i> below.</span></p>
+
+<p class=MsoBodyText style='margin-left:20.1pt;text-align:justify;text-indent:
+-20.1pt'><b style='mso-bidi-font-weight:normal'><span lang=EN-US>=</span></b><span
+lang=EN-US> -<span style='mso-tab-count:1'> </span>the calculated cycle count
+for this range will be <span class=SpellE>overriden</span> by the given <i
+style='mso-bidi-font-style:normal'>value</i>. Intended to be used for
+individual instructions, use for a bigger range for extra fun with unexpected
+results. The individual instructions' cycle count will be prefixed by “<b
+style='mso-bidi-font-weight:normal'>=</b>” in the output file for this range.</span></p>
+
+<p class=MsoBodyText style='margin-left:20.1pt;text-align:justify;text-indent:
+-20.1pt'><b style='mso-bidi-font-weight:normal'><span lang=EN-US>^</span></b><span
+lang=EN-US> -<span style='mso-tab-count:1'> </span>in this range, the
+alternative (higher) cycle count is always used, if available. The individual
+instructions' cycle count will be prefixed by “<b style='mso-bidi-font-weight:
+normal'>^</b>” in the output file for this range. See also <i style='mso-bidi-font-style:
+normal'>taken/not taken</i> in <i style='mso-bidi-font-style:normal'>special
+cases</i> below.</span></p>
+
+<p class=MsoBodyText style='text-align:justify'><span lang=EN-US>Caution, <b
+style='mso-bidi-font-weight:normal'>value</b> is entered in <b
+style='mso-bidi-font-weight:normal'>hexadecimal</b> with no prefix <span
+class=GramE>nor</span> suffix, just as the addresses in the range.</span></p>
+
+<h2 style='margin-left:0cm;text-align:justify;text-indent:0cm'><span
+lang=EN-US>Special cases</span></h2>
+
+<p class=MsoBodyText style='text-align:justify'><span lang=EN-US>Some
+processors, such as the Z80 and the <span class=SpellE>SiLabs</span> <span
+class=SpellE>singleclock</span> '51 core, have some instructions with two
+different cycle counts - conditional jumps (calls, returns), with different timing
+for the taken/not taken jump; and <span class=SpellE>autorepeated</span>
+instructions. The <b style='mso-bidi-font-weight:normal'>default</b> value is
+the <b style='mso-bidi-font-weight:normal'>smaller</b>, jump-not-taken, or, for
+the <span class=SpellE>autorepeated</span> instructions, last-repeat
+(single-pass), value. However, there are exceptions.</span></p>
+
+<p class=MsoBodyText style='text-align:justify'><b style='mso-bidi-font-weight:
+normal'><span lang=EN-US>Repeated</span></b><span lang=EN-US> and <span
+class=SpellE><b style='mso-bidi-font-weight:normal'>autorepeated</b></span>
+instructions can be properly counted, if a single-address range is given for
+the first byte of the instruction, with a <b style='mso-bidi-font-weight:normal'>*</b>
+suffix, giving the number of repeats. In this case, the instruction's cycle
+count is calculated as the number of repeats less one times the bigger count,
+plus the smaller count. This calculation is written to the comment field and
+there will be no summary for this range.</span></p>
+
+<p class=MsoBodyText style='text-align:justify'><span lang=EN-US>For example,
+if </span><span lang=EN-US style='font-family:"Courier New";mso-bidi-font-family:
+"Times New Roman"'>Z <span class=SpellE>addr</span>*23</span><span lang=EN-US> <span
+class=GramE>directive</span> is used for a <span class=SpellE>djnz</span> at
+address <span class=SpellE>addr</span>, the following will be output (note that
+value is 23 hexadecimal = 35 decimal):</span></p>
+
+<p class=MsoBodyText style='text-align:justify'><span class=SpellE><span
+class=GramE><span lang=EN-US style='font-family:"Courier New";mso-bidi-font-family:
+"Times New Roman"'>addr</span></span></span><span lang=EN-US style='font-family:
+"Courier New";mso-bidi-font-family:"Times New Roman"'>:<span style='mso-tab-count:
+1'> </span><span class=SpellE>djnz</span><span style='mso-tab-count:1'>  </span>begin<span
+style='mso-tab-count:2'>       </span>;450 = 13 * 34x + 8 ;<o:p></o:p></span></p>
+
+<p class=MsoBodyText style='text-align:justify'><span class=GramE><span
+lang=EN-US>Note,</span></span><span lang=EN-US> that this won't work if the
+range is bigger than this. Thus, for example, if there is a cycle ending by a <span
+class=SpellE>djnz</span> (Z80-style) executed multiple times, the proper cycle
+count cannot be obtained using a single </span><span lang=EN-US
+style='font-family:"Courier New";mso-bidi-font-family:"Times New Roman"'>Z
+begin-end*repeats</span><span lang=EN-US> directive; the following construction
+has to be used instead:</span></p>
+
+<p class=MsoBodyText style='margin-bottom:0cm;margin-bottom:.0001pt;text-align:
+justify;tab-stops:141.95pt'><span lang=EN-US style='font-family:"Courier New";
+mso-bidi-font-family:"Times New Roman"'>Z begin-addr1*repeats<span
+style='mso-tab-count:1'>   </span><span class=GramE>;addr1</span> is the
+address just before <span class=SpellE>djnz</span> (addr1=addr2-1)<o:p></o:p></span></p>
+
+<p class=MsoBodyText style='margin-bottom:0cm;margin-bottom:.0001pt;text-align:
+justify;tab-stops:141.95pt'><span lang=EN-US style='font-family:"Courier New";
+mso-bidi-font-family:"Times New Roman"'>Z addr2*repeats<span style='mso-tab-count:
+1'>         </span><span class=GramE>;addr2</span> is the address of <span
+class=SpellE>djnz</span><o:p></o:p></span></p>
+
+<p class=MsoBodyText style='margin-bottom:0cm;margin-bottom:.0001pt;text-align:
+justify;tab-stops:141.95pt'><span lang=EN-US style='font-family:"Courier New";
+mso-bidi-font-family:"Times New Roman"'>Z begin-addr2<span style='mso-tab-count:
+1'>           </span><span class=GramE>;this</span> range gives the final count<o:p></o:p></span></p>
+
+<p class=MsoBodyText style='margin-top:5.65pt;margin-right:0cm;margin-bottom:
+5.95pt;margin-left:0cm;text-align:justify'><span lang=EN-US>A similar construction
+can be used for a cycle ending by any conditional jump.</span></p>
+
+<p class=MsoBodyText style='margin-top:14.15pt;margin-right:0cm;margin-bottom:
+5.95pt;margin-left:0cm;text-align:justify'><b style='mso-bidi-font-weight:normal'><span
+lang=EN-US>Conditional jumps </span></b><span lang=EN-US>are guessed to be <b
+style='mso-bidi-font-weight:normal'>taken</b>, if the following instruction
+falls outside any range, or an excluding range (suffix <b style='mso-bidi-font-weight:
+normal'>-</b>) begins on the following instruction, or, of course, if “explicit
+taken” has been defined (see ^ suffix). In this case, the jump instruction's
+cycle count will be prefixed by “<b style='mso-bidi-font-weight:normal'>^</b>”
+in the output file.</span></p>
+
+<p class=MsoBodyText style='text-align:justify'><span lang=EN-US>If the guesses
+work out bad, try to use the <b style='mso-bidi-font-weight:normal'>=</b>
+prefix for overriding it by explicit cycle count value.</span></p>
+
+<h2 style='margin-left:0cm;text-align:justify;text-indent:0cm'><span
+lang=EN-US>Customized cycle files</span></h2>
+
+<p class=MsoBodyText style='text-align:justify'><span lang=EN-US>The default
+cycles counts can be <span class=SpellE>overriden</span> by a user-definable
+list of cycle counts. This is imported using a command-line <b
+style='mso-bidi-font-weight:normal'>–z</b> switch. The filename must be added
+immediately after –z, with not space.</span></p>
+
+<p class=MsoBodyText style='text-align:justify'><span lang=EN-US>The format of
+each line in the file is the following:</span></p>
+
+<p class=MsoBodyText style='text-align:justify'><span lang=EN-US>[<span
+class=SpellE><span class=GramE>opcode</span></span> <b style='mso-bidi-font-weight:
+normal'>-</b> cycle count[<b style='mso-bidi-font-weight:normal'>/</b>
+alternative cycle count]][<b style='mso-bidi-font-weight:normal'>;</b>
+comment][<b style='mso-bidi-font-weight:normal'>#</b> <span class=GramE>comment</span>]</span></p>
+
+<p class=MsoBodyText style='text-align:justify'><span class=SpellE><span
+lang=EN-US>Opcode</span></span><span lang=EN-US> and cycle counts are given in
+hexadecimal with no prefix/suffix, maximum two digits. Alternative cycle count
+is for conditional jumps and <span class=SpellE>autorepeated</span> <span
+class=GramE>instructions,</span> see <i style='mso-bidi-font-style:normal'>special
+cases</i> above. <span class=SpellE>Opcodes</span> can be in any order. Missing
+<span class=SpellE>opcodes</span> will be given cycle count = 0. Comment <span
+class=GramE>with <b style='mso-bidi-font-weight:normal'>;</b></span> is
+ignored, comment with <b style='mso-bidi-font-weight:normal'>#</b> is printed
+to console when file is read in.</span></p>
+
+<h2 style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Known issues</span></h2>
+
+<p class=MsoBodyText style='text-align:justify'><span lang=EN-US>There is no
+8080 support in DZ80.</span></p>
+
+<p class=MsoBodyText style='text-align:justify'><span lang=EN-US>In the import
+of user definable cycle files, there is no support for the prefixed Z80
+instructions.</span></p>
+
+<p class=MsoBodyText style='text-align:justify'><span lang=EN-US>If the <b
+style='mso-bidi-font-weight:normal'>-</b> suffix has to be used to specify an
+excluded range for a single instruction, the one-address format cannot be used,
+<span class=GramE>i.e</span>. <i style='mso-bidi-font-style:normal'>Z address-</i>
+won't work properly. Use <i style='mso-bidi-font-style:normal'>Z address&#8209;address&#8209;</i>
+instead.</span></p>
+
+<h2 style='margin-left:0cm;text-indent:0cm'><span lang=EN-US>Why in <span
+class=SpellE>disassembler</span>?</span></h2>
+
+<p class=MsoBodyText style='text-align:justify'><span lang=EN-US>Cycle counting
+is used usually to optimize a certain section of a newly written program. It
+would be more convenient to have the cycle count in assembler and/or compiler
+output, no doubt.</span></p>
+
+<p class=MsoBodyText style='text-align:justify'><span lang=EN-US>However,
+having it in <span class=SpellE>disassembler</span>, the cycle counting gets
+assembler/compiler independent. Most of assemblers/compilers are closed source,
+even if some of them are provided free. Support for cycle counting is therefore
+upon to the goodwill of the assembler/compiler author. Also, it is not likely
+that a common library would fit universally, which makes cycle counting availability
+<span class=SpellE>accross</span> multiple tools less likely. </span></p>
+
+<p class=MsoBodyText style='text-align:justify'><span lang=EN-US>That's why.</span></p>
+
+<p class=MsoBodyText style='text-align:justify'><span lang=EN-US><o:p>&nbsp;</o:p></span></p>
+
+</div>
+
+</body>
+
+</html>

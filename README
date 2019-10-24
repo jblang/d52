@@ -1,0 +1,142 @@
+
+D52 8052 Disassembler Version 3.4.1 (includes D48 and DZ80)
+=========================================================
+
+Licence: GNU General Public License version 3 (see the file COPYING).
+ NOTE: As Novell and Microsoft are in violation of the GPL, this software
+ may not be distributed by either Novell or Microsoft. The same prohibition
+ applies to any company that enters into an agreement with Microsoft regarding
+ Microsoft's phony patent claims against Linux. In addition, no one who cannot
+ honor ALL the requirements of GPL version 3 may distribute this software.
+
+The latest release version of D52 will always be available on 8052.com (or as
+long as Craig Steiner graciously allows me space on 8052.com--thanks Craig!).
+
+The disassemblers (with Linux and Windows binaries) are also available on my
+web site: http://home.pacbell.net/theposts.
+
+New Features:
+-------------
+Version 3.3 now includes a code analysis option for the 8052 disassembler.
+The -t command line option causes D52 to trace and analyze the code in the
+file to be disassembled to determine which parts of the file are actually
+executable code, and which parts are data, such as ascii text, 8-bit binary
+data, 16-bit binary data or pointers.
+
+The results of the analysis are written to a control file which is then used in
+the disassembly process. Use of the -t option will overwrite any existing
+control file for the program to be disassembled, and so should only be used on
+the first disassembly. You may modify the control file with any text editor to
+correct any analysis errors or to add new directives for subsequent
+disassemblies of a file.
+
+The code analysis option is available only in D52 and DZ80. This feature should
+be considered beta test, although D52 as a whole is a mature program.
+
+History:
+--------
+
+Version 3.4.1
+  Changed license to GNU General Public License Version 3.
+  Improved code analysis routines.
+  If code analysis (-t option) fails, outputs a warning message instead of an
+   error message. Increased size of trace stacks for code analysis.
+  Changed date/time output to year/month/day format.
+  Added address offset directive ('o' control file directive that has the same
+   effect as the x command line option.
+  Fixed errors in 8048 cycle table.
+  Applied Frieder Ferlemann's patch to allow hexadecimal values in the control
+   file to optionally be prefixed with "0x" (ie: either 1234 or 0x1234).
+  Fixed bug that would cause all data from an Intel hex record to be lost if
+   the addresses for the block included 0ffffh.
+
+Version 3.4.0
+  Added cycle count directive('z' control file directive) and command line
+   option to read cycle count file for d52 derivatives. Many thanks to Jan
+   Waclawek for suggesting this feature and for implementing the code. Please
+   read Jan's documetation in the 'cyclefiles' directory.
+  Bug fixes for the 8048 disassembler.
+  Improvements in output formatting.
+  Improved control file error messages.
+  Fixed bug that caused quoted operand symbols (ie: ' ') with non-visible
+   characters to be truncated.
+  Added Y directive. This is the same as the X directive except that an EQU
+   statement will not be generated for the operand name.
+  Added N directive to suppress automatic generation of a label for addresses
+   referenced that are really constants instead of addresses.
+  Added N command line option to output operands in C style (0xcd instead of 0cdh).
+  Added P command line option to output pseudo ops with a leading dot (eg: .equ).
+
+Version 3.3.9
+  Adds dz80 flags -80 and -85 for disasembling with 8080 or 8085 mnemonics.
+
+Version 3.3.8
+  Fixes compile errors on Mac OSX and BSD unixes. Also fixed error in Z80
+   analysis trace routine. Thanks to Brian Foley for spotting these problems.
+
+Version 3.3.7
+  Adds the 'n' directive to suppress automatic generation of a label for a
+   referenced address.
+
+Version 3.3.6
+  Now allows you to specify the file extension of the file to be disassembled
+   (eg: d52 -d testfile.hex). If you specify the extention, the -b (binary),
+   -h (Intel hex), and -c (CP/M .com file if using DZ80) flags are not required.
+  Fixed bug that caused assembler pseudo opcodes to not be output in upper
+   case if the -u option was given on the command line, but no control file
+   existed for the file to be disassembled.
+  Suppress generation of an equ statement for an address if a label for
+   that address had already been output. (This bug would cause some cross-
+  assemblers to output an error even though the value of the equ matched
+   the address of the label.)
+  The keil A51 option (-k) should be used only if you intend to re-assemble
+   the output file using the older DOS version of A51.
+
+Version 3.3.5
+  Fixes bug with patch directive. Code cleanup and minor bug fixes.
+  Will no longer abort if input file exceeds 64KB, but code beyond 64K will be
+   ignored.
+
+Version 3.3.4
+  Adds a new command line option and a new control file directive.
+  The -u option causes mnemonics, labels, symbols, etc to be output in upper
+   case for cross assemblers that may require upper case code. Strings,
+   literal data, and comments are not affected. The P directive is similar to
+   the header comment directive (#) except that the user string will be output
+   as code, rather than as a comment. May be useful for inserting include
+   statements or macro definitions into the output file. A preliminary trace
+   option has been added to the Z80 disassembler (DZ80), but is still
+   experimental--use it with caution. V3.3.4 also includes some bug fixes.
+
+Version 3.3.3
+  Corrects a bug that would allow more than one equate statement to be
+   generated for name symbols with the same value. Inline comments now allowed
+   for byte (8-bit) data. Corrected endian problem with Z80 disassembler.
+  Changed format of 'd' directive.
+
+Version 3.3.2
+  Allows inline comments after address and word data.
+  Corrects a bug that would force word data following a header comment to be
+   interpreted as byte data.
+
+Version 3.3.1
+  D52 corrects a bug regarding the Keil flag.
+
+Version 3.3
+  DZ80 now has a command line option (-c) to disassemble CP/M .com files, in
+   addition to hex and binary files.
+
+The Future:
+-----------
+
+Dis52, a GUI front end for D52, D48 and DZ80, is currently under development,
+and a preview version for Linux (or other Unix-like OS) is now available. (Due
+to flaws in the design of Windows, Dis52 is not available for Windows.)
+
+Dis52 requires the SDL (Simple DirectMedia Layer) library. SDL can be downloaded
+from http://www.libsdl.org.
+
+Jeff Post
+j_post <AT> pacbell <DOT> net
+September, 2007
+

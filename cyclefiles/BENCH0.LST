@@ -1,0 +1,72 @@
+BENCH0                                                                                                        PAGE 1
+
+                       1    $mod52       
+                       2    
+0020                   3            DSEG AT 20h
+0020                   4    TI_PTR: DS      1
+0021                   5    Rx_Head: DS     1
+0022                   6    Rx_Tail: DS     1
+0023                   7    TxBuff: DS      5
+0028                   8    TxBuffEnd:
+0028                   9    RxBuff: DS      5
+002D                  10    RxBuffEnd:
+                      11    
+----                  12            CSEG
+                      13    
+0000 C0D0             14    SerialISR:      PUSH  PSW
+0002 C0E0             15            PUSH  ACC
+0004 D2D3             16            SETB  RS0
+0006 109908           17            JBC   TI,TI_ISR
+0009 10981C           18    TI_ISREnd:      JBC   RI,RI_ISR
+000C D0E0             19    SerialISREnd:   POP   ACC
+000E D0D0             20            POP   PSW
+0010 32               21            RETI
+0011 E520             22    TI_ISR: MOV   A,TI_PTR
+0013 60F4             23            JZ    TI_ISREnd
+0015 1520             24            DEC   TI_PTR
+0017 2422             25            ADD   A,#LOW(TxBuff-1)
+0019 F8               26            MOV   R0,A
+001A AAA0             27            MOV   R2,P2
+001C E4               28            CLR   A
+001D 3400             29            ADDC  A,#HIGH(TxBuff-1)
+001F F5A0             30            MOV   P2,A
+0021 E2               31            MOVX  A,@R0
+0022 8AA0             32            MOV   P2,R2
+0024 F599             33            MOV   SBUF,A
+0026 80E1             34            SJMP  TI_ISREnd
+0028 A921             35    RI_ISR: MOV   R1,RX_Head
+002A A799             36            MOV   @R1,SBUF
+002C 09               37            INC   R1
+002D B92D02           38            CJNE  R1,#RXBuffEnd,RI_ISR_X1
+0030 7928             39            MOV   R1,#RXBuff
+0032 E9               40    RI_ISR_X1:      MOV   A,R1
+0033 B52202           41            CJNE  A,RX_Tail,RI_ISR_X2
+0036 80D4             42            SJMP  SerialISREnd
+0038 F521             43    RI_ISR_X2:      MOV   RX_Head,A
+003A 80D0             44            SJMP  SerialISREnd
+                      45            end
+
+VERSION 1.2k ASSEMBLY COMPLETE, 0 ERRORS FOUND
+BENCH0                                                                                                        PAGE 2
+
+ACC. . . . . . . . . . . . . . .  D ADDR  00E0H  PREDEFINED  
+P2 . . . . . . . . . . . . . . .  D ADDR  00A0H  PREDEFINED  
+PSW. . . . . . . . . . . . . . .  D ADDR  00D0H  PREDEFINED  
+RI . . . . . . . . . . . . . . .  B ADDR  0098H  PREDEFINED  
+RI_ISR . . . . . . . . . . . . .  C ADDR  0028H  
+RI_ISR_X1. . . . . . . . . . . .  C ADDR  0032H  
+RI_ISR_X2. . . . . . . . . . . .  C ADDR  0038H  
+RS0. . . . . . . . . . . . . . .  B ADDR  00D3H  PREDEFINED  
+RXBUFF . . . . . . . . . . . . .  D ADDR  0028H  
+RXBUFFEND. . . . . . . . . . . .  D ADDR  002DH  
+RX_HEAD. . . . . . . . . . . . .  D ADDR  0021H  
+RX_TAIL. . . . . . . . . . . . .  D ADDR  0022H  
+SBUF . . . . . . . . . . . . . .  D ADDR  0099H  PREDEFINED  
+SERIALISR. . . . . . . . . . . .  C ADDR  0000H  NOT USED  
+SERIALISREND . . . . . . . . . .  C ADDR  000CH  
+TI . . . . . . . . . . . . . . .  B ADDR  0099H  PREDEFINED  
+TI_ISR . . . . . . . . . . . . .  C ADDR  0011H  
+TI_ISREND. . . . . . . . . . . .  C ADDR  0009H  
+TI_PTR . . . . . . . . . . . . .  D ADDR  0020H  
+TXBUFF . . . . . . . . . . . . .  D ADDR  0023H  
+TXBUFFEND. . . . . . . . . . . .  D ADDR  0028H  NOT USED  

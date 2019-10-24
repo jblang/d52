@@ -1,0 +1,1503 @@
+<!doctype html public"-//w3c//dtd xhtml 1.0 Transitional//en">
+<html>
+<head>
+<title>D52 Disassembler User's Manual</title>
+</head>
+<body>
+<a name="topofdoc"></a>
+<div align="center">
+<font size="8" color="#ff0000">
+<strong><i>D52 Disassembler User's Manual</i></strong><br>
+</font>
+<hr>
+<font size="4" color="#000000">
+8052 Disassembler for Linux and Windows<br>
+GNU General Public License Version 3<br>
+Copyright 2007 by Jeffery L. Post<br>
+&nbsp;&#106;_&#112;&#111;st &lt;&#65;T&gt; p&#97;c&#98;e&#108;l &lt;D&#79;T&gt; n&#101;t<br>
+Hosted on <a href="http://www.8052.com/users/disasm">www.8052.com</a>
+<br><br>
+Version 3.4.1 - September, 2007
+</font>
+<hr>
+</div>
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+<br><br>
+The file COPYING contains the full text of the GNU General Public License, Version 3.
+<br><br>
+<i><b>NOTE: As Novell and Microsoft are in violation of the GPL, this software
+may not be distributed by either Novell or Microsoft. The same prohibition applies
+to any company that enters into an agreement with Microsoft regarding Microsoft's
+phony patent claims against Linux. In addition, no one who cannot or will not
+honor ALL the requirements of GPL version 3 may distribute this software.</b></i>
+<hr>
+
+<h3>TABLE OF CONTENTS</h3>
+<ul>
+<li><a href="#introduction">Introduction</a><br>
+<li><a href="#disclaimer">Disclaimer</a><br>
+<li><a href="#starting">Getting Started</a><br>
+<li><a href="#options">Command Line Options</a><br>
+<a href="#aoption">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A option - define ascii macro</a><br>
+<a href="#boption">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B option - disassemble binary file</a><br>
+<a href="#doption">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D option - put data in comment field</a><br>
+<a href="#hoption">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;H option - disassemble hex file</a><br>
+<a href="#ioption">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I option - add include for 'sfr52.inc' file</a><br>
+<a href="#koption">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K option - disassemble for older (DOS) Keil A51</a><br>
+<a href="#noption">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;N option - output operands in C style format (0xcd instead of 0cdh)</a><br>
+<a href="#poption">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P option - put dot '.' in front of pseudo ops (eg: .equ instead of equ) </a><br>
+<a href="#soption">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S option - change pseudo op for ascii strings</a><br>
+<a href="#toption">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T option - trace and analyze code before disassembly</a><br>
+<a href="#uoption">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;U option - output labels, mnemonics, etc in upper case</a><br>
+<a href="#xoption">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X option - add hex offset to addresses</a><br>
+<a href="#zoption">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Z option - read cycle count file (d52  only)</a><br>
+<li><a href="#directives">Control File Directives - define interpretation of disassembly data</a><br>
+<a href="#adirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;A directive - address data</a><br>
+<a href="#bdirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;B directive - byte (8 bit) data</a><br>
+<a href="#cdirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;C directive - code (force disassembly)</a><br>
+<a href="#ddirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;D directive - data type (label or symbol)</a><br>
+<a href="#fdirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;F directive - define SFR label</a><br>
+<a href="#idirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;I directive - ignore data (do not disassemble)</a><br>
+<a href="#kdirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;K directive - define name for SFR bit</a><br>
+<a href="#ldirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L directive - define label</a><br>
+<a href="#mdirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;M directive - define name for bit addressable memory</a><br>
+<a href="#ndirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;N directive - suppress label generation for an address</a><br>
+<a href="#odirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;O directive - add hex offset to addresses</a><br>
+<a href="#pdirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;P directive - patch inline code</a><br>
+<a href="#rdirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;R directive - define register name</a><br>
+<a href="#sdirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;S directive - define symbol</a><br>
+<a href="#tdirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;T directive - ascii text</a><br>
+<a href="#wdirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;W directive - word (16 bit) data </a><br>
+<a href="#xdirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X directive - define name for specific operand</a><br>
+<a href="#ydirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Y directive - define name for specific operand but suppress EQU generation</a><br>
+<a href="#zdirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Z directive - specify code for which to generate cycle counts</a><br>
+<a href="#commentdirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# directive - header comment</a><br>
+<a href="#icommentdirective">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;! directive - inline comment</a><br>
+<li><a href="#symnote">A Note on Symbols, Labels and Names</a><br>
+<li><a href="#outfile">Format of Output File</a><br>
+<li><a href="#summary">Summary</a><br>
+<li><a href="#regmaps">8052 Register Maps</a><br>
+<li><a href="#bsfr">8052 Bit Addressable SFRs</a><br>
+<li><a href="#bmem">8052 Bit Addressable Memory</a><br>
+</li>
+</ul>
+<br><br>
+
+<a href="#topofdoc">Back to top</a><br>
+
+<a name="introduction"></a>
+<h4><em>Introduction</em></h4>
+<hr>
+
+The D52 disassembler allows the user to specify memory areas as code,
+binary data (8 or 16 bit), ascii text, address tables, or data that should
+be ignored (not disassembled). You may specify such areas in an ascii text
+file with the same name as the file to be disassembled, but with an extension
+of <em>ctl</em> (for example: program.ctl controls the disassembly of program.hex or
+program.bin).
+<br><br>
+With the use of a control file, you can, by an iterative process, get a
+progressively more meaningful disassembly by modifying the control file
+based on examination of the output of previous runs of the disassembler.
+You can also specify names for labels and symbols in the control file,
+resulting in a much more readable source file.
+<br><br>
+Labels and symbols may have as many characters as will fit in one line of
+the control file, but some cross assemblers (and especially cross linkers)
+will truncate any more than some fixed number of characters. Consult your
+cross development tool documentation. Labels and symbols are not case sensitive.
+<br><br>
+The control file may exist in either the current directory or the
+directory of the file to be disassembled. If it is in both directories,
+the control file in the current directory will take precedence. The
+output file will always be placed in the current directory.
+<br><br>
+The
+<a href="#starting">getting started</a>
+section of this document gives some minimal information
+for users who are eager to try out the disassembler. For best
+use of the disassembler, however, you should read the sections on
+<a href="#options">command line options</a>
+and
+<a href="#directives">control file directives</a>
+before proceeding.
+<br><br>
+Much of the information in this manual also applies to the 8048 and Z80
+disassemblers. Invoking the disassemblers without any command line
+parameters will display a list of options.
+<br><br>
+
+<a name="disclaimer"><em>Disclaimer</em></a><hr>
+D52 is a tool for educational use and for recovering source code that has been
+lost or is unavailable.
+<em>Disassembling a program may be unethical or illegal under some circumstances.</em>
+It is your sole responsibility to determine whether use of D52 for a particular
+purpose is both legal and ethical.
+<br><br>
+
+<br><br>
+<a href="#topofdoc">Back to top</a><br>
+
+<a name="starting"></a>
+<h4><em>Getting Started</em></h4>
+<hr>
+
+D52 is a command line disassembler. To disassemble a file called 'program.bin'
+or 'program.hex', type in (at the command line prompt):
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td>d52 -d program</td></tr>
+</table>
+
+A control file with the same name as the file to be disassembled, but with
+an extension of '.ctl' can be created in which you can specify areas of
+memory to be ascii text, 8-bit binary data, 16-bit binary data, etc.
+A control file is not necessary for disassembly, but as will be seen,
+it will provide for a much more complete disassembly. The
+<a href="#toption">t option</a>
+will cause D52 to trace and analyze the code before disassembly, and will
+create a preliminary control file.
+
+<br><br>
+If a file extension is not provided and neither the
+<a href="#boption">b option</a>
+nor the
+<a href="#hoption">h option</a>
+is specified on the command line, the disassembler will first search for a hex
+file and, if it is not found, will then search for a bin file. The disassembler
+can be forced to look for only one or the other by specifying either the
+<a href="#boption">binary</a>
+or the
+<a href="#hoption">hex</a>
+option on the command line:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td>d52 -db program</td>
+      <td></td><td></td><td></td><td></td><td>for the file program.bin, or</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td>d52 -dh program</td>
+      <td></td><td></td><td></td><td></td><td>for the file program.hex</td></tr>
+</table>
+
+If a file extension of '.hex' or '.bin' is provided in the filename (ie: d52 test.hex),
+that is equivalent to using the
+<a href="#hoption">h option</a>
+or
+<a href="#boption">b option</a>.
+<br><br>
+
+D52 will produce a file named 'program.d52' containing the disassembly of
+the 8051/8052 instructions in the original hex or binary file. It is
+very useful on the first few disassemblies to use the
+<a href="#doption">d option</a>
+, which adds a comment field to every line. The comment field contains the
+hexadecimal address of each instruction, the hex data for each byte in
+the instruction, and the ascii code for each byte of the instruction.
+<br>Example:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>(opcode/operands)</td><td>(address)</td><td>(data)</td><td>(ascii)</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>orl a,#42h</td><td>; 0df6</td><td>44 42</td><td>DB</td></tr>
+</table>
+
+This makes it easy to spot areas of ascii text or other nonexecutable
+code, and you can then modify the control file to tell the disassembler
+that these areas should be treated as some other kind of data on subsequent
+disassemblies. Please see the section on
+<a href="#directives">control file directives</a>
+for specific information.
+<br><br>
+
+By examining the output file and then modifying the control file based
+on the information obtained, you can get a progressively better disassembly
+of your program. Generally, about half a dozen iterations of the disassembly
+are enough to produce a very readable source file that can then be modified
+and reassembled.
+
+<br><br>
+<a href="#topofdoc">Back to top</a><br>
+
+<a name="options"></a>
+<h4><em>Command Line Options</em></h4>
+<hr>
+
+Command line options modify the operation of the disassembler.
+They may be specified on the command line using either Unix style
+options:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>d52 -db filename</td></tr>
+</table>
+
+or DOS style options:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>d52 /d /b filename</td></tr>
+</table>
+
+Options may be entered in a freeform fashion (in any order or format)
+provided that any options preceeding the filename of the program to be
+disassembled must begin with either a dash (-) or a slash (/). For example:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>d52 /db filename -x1000</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>d52 filename -d b x1000</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>d52 -d filename bx1000</td></tr>
+</table>
+
+all mean exactly the same thing and will cause the disassembler to
+behave in exactly the same way. Exceptions are that the
+<a href="#xoption">X option</a>
+, if used, must be the last option given, and if both the
+<a href="#aoption">A option</a> and the
+<a href="#soption">S option</a>
+are used, the S option must preceed the A option.
+<br><br>
+Note that the file name specified on the command line does <em>not</em>
+include the .hex or .bin extention.
+<br><br>
+Command line options are:
+<hr>
+
+<a name="aoption"></a>
+<h4><em>A Option (ascii macro)</em></h4>
+
+The A option tells the disassembler to change the db/defb pseudo op to
+the ascii macro (pseudo op 'ascii' instead of 'db' or 'defb') for areas
+defined as ascii text. This will cause the disassembler to include a
+macro definition in the disassembly output file that should expand to
+'db' for the cross assembler. To use this option, your cross assembler
+must be able to handle macros, and in particular, D52's macro format.
+If used in conjunction with the
+<a href="#soption">S option</a>
+, the S option must come first on the command line.
+<br><br>
+There are some caveats regarding the ascii macro. The intent of
+this macro is to make ascii text easier to find in the output file.
+Once you're satisfied with the readability of the output file, you
+may want to run the disassembler once more without the A option to
+produce a file compatible with your cross assembler.
+<br><br>
+Some cross assemblers treat certain characters within a macro as
+special meta-characters. The Huntsville Microsystems HMA8051, for
+example, regards the characters '#', '.' and '\' as special within a
+macro. If these characters occur in ascii text using the ascii macro
+of D52, the assembler will do strange and not so wonderful things with
+them. If this happens, just do not use the A option (by default, it is off).
+<br><br>
+A problem that will be common with all cross assemblers is that
+the disassembler does not currently treat the single quote (')
+character differently than it does other characters within
+ascii text. Since the disassembler delineates ascii text (whether using
+the A option or not) with the single quote character, its presence
+in ascii text areas will cause problems. The only solution to this is to
+manually edit the output file of the disassembler or to define the byte
+of the single quote as a binary byte in the control file (see the
+<a href="#bdirective"> B control file directive</a>
+).
+
+<a name="boption"></a>
+<h4><em>B Option (read binary file)</em></h4>
+
+The B option forces the disassembler to read a binary file
+(extention '.bin') instead of an Intel hex file (extention .hex).
+If neither the B option nor the
+<a href="#hoption">H option</a>
+are specified, the disassembler will first search for a file with an
+extention of .hex, and if not found, will then search for a binary
+file with an extention of .bin.
+
+<a name="doption"></a>
+<h4><em>D Option (put data in comment field)</em></h4>
+
+The D option tells the disassembler to include a comment field
+in each disassembled line. The comment field will contain the
+hexadecimal address of each instruction, the hex data for each
+byte in the instruction, and the ascii code for each byte of the
+instruction. Example:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>(opcode/operands)</td>
+      <td>(address)</td><td>(data)</td><td>(ascii)</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>orl a,#42h</td>
+      <td>; 0df6</td><td>44 42</td><td>DB</td></tr>
+</table>
+
+This makes it easy to spot areas of ascii text or other nonexecutable
+code, and then modify the control file to tell the disassembler that
+these areas should be treated as some other kind of data on subsequent
+disassemblies. Please see the section on
+
+<a href="#directives">control file directives</a>
+
+for specific information.
+
+<a name="hoption"></a>
+<h4><em>H Option (read hexadecimal file)</em></h4>
+
+The H option forces the disassembler to read an Intel hex file
+(extention '.hex') instead of a binary file (extention '.bin').
+If neither the
+<a href="#boption">B option</a>
+nor the H option are specified, the disassembler will first
+search for a file with an extention of '.hex', and if not found,
+will then search for a binary file with an extention of '.bin'.
+
+<a name="ioption"></a>
+<h4><em>I option (add include for 'sfr52.inc' file)</em></h4>
+
+The I option adds this line to the .d52 disassembly file:
+
+<br><br>
+<pre>
+	include	"sfr52.inc"
+</pre>
+<br><br>
+
+The file 'sfr52.inc' includes equates for 8052 special function registers
+and SFR bits that may be needed by some cross assemblers. The sfr52.inc
+file <em>should be modified to suite your 8052 cross assembler</em>
+since the equates required will vary from assembler to assembler.
+For example, one cross assembler I test with requires the equate for
+'acc', and yet another cross assembler not only does not require it,
+but will generate an error if it is present. You may also need to
+edit the 'include' pseudo-op in the disassembly file if your cross
+assembler uses some other pseudo-op to include files (or edit the
+source file 'd52p2.c' and recompile).
+<br><br>
+It is best to start out with all the equates in sfr52.inc commented out,
+find out what undefined label errors your cross assembler generates,
+then uncomment the required equates in sfr52.inc.
+<br><br>
+This option is incompatible with the
+<a href="#koption">K option</a>.
+
+<a name="koption"></a>
+<h4><em>K Option (disassemble for Keil's A51 assembler)</em></h4>
+
+Tells D52 to generate source code compatible with the older Keil A51 assembler.
+<br><br>
+<i><b>NOTE:</b> Newer versions of Keil's A51 assembler (tested with version 7.10)
+have come into compliance with the rest of the world. <b>Do not</b> use this option
+with newer versions of A51.</i>
+
+<a name="noption"></a>
+<h4><em>N Option (use C type operands)</em></h4>
+
+Use this option to have the disassembler output hexadecimal operands using C
+notation, ie: 0xcd instead of the default 0cdh.
+
+<a name="poption"></a>
+<h4><em>P Option (add dot in front of pseudo ops)</em></h4>
+
+Some assemblers require pseudo operations to begin with a dot. Use this option
+to have the disassembler output ".equ" instead of "equ" and similar for org and
+other pseudo operations.
+
+<a name="soption"></a>
+<h4><em>S Option (set string pseudo op)</em></h4>
+
+This option tells the disassembler to generate the pseudo ops
+'defb' and 'defw' instead of 'db' and 'dw' for those cross
+assemblers that may require this. Most cross assemblers understand
+'db' and 'dw', so these are the defaults for the disassembler. Use
+this option for cross assemblers that do not recognize 'db' and
+'dw'. If used in conjunction with the
+<a href="#aoption">A option</a>
+, the S option must preceed the A option on the command line.
+
+<a name="toption"></a>
+<h4><em>T Option (trace and analyze code)</em></h4>
+
+This option tells D52 to trace and analyze the 8052 code before disassembling it.
+D52 will attempt to determine which parts of the code are actually code, and
+which parts are ascii text, binary data, pointers, etc. While it does a reasonably
+good job of analyzing the code on most files, no program can do as good a job as
+a human programmer. A control file with the same name as the hex or bin file, but
+with an extension of '.ctl', will be created before the actual disassembly is
+performed. You can then edit the control file to correct any erroneous directives,
+or to add new directives.
+
+<br><br>
+<em>Warning:</em> Using this option will <em>overwrite</em> any control file
+that may already exist for the code file being disassembled. It is intended to
+be used on the <em>first</em> disassembly only.
+
+<a name="uoption"></a>
+<h4><em>U Option (upper case output)</em></h4>
+
+Causes labels, symbols, mnemonics, etc to be output in upper case, for cross
+assemblers that may require upper case code. Comments, literal data values,
+strings, and other output are not affected by this option.
+
+<a name="xoption"></a>
+<h4><em>X Option (add hexadecimal offset to addresses)</em></h4>
+
+This option causes the disassembler to add a hexadecimal offset
+to the address of every location in the code file. This may be
+useful for disassembling code that was read from the second (or
+subsequent) rom of a set of roms. For example, suppose that
+binary data was obtained from a set of 4K byte eproms (call them
+rom1 and rom2). Then the first file should be disassembled with
+the command line:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>d52 -d rom1</td>
+</table>
+
+and the second should be disassembled with the X option:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>d52 -d rom2 x1000</td>
+</table>
+
+The two files then can be combined into one and all references
+within the disassembled code will be to the correct addresses.
+<br><br>
+If given on the command line, the X option overrides any <a href="#odirective">
+O directive</a> in the control file.
+
+<a name="zoption"></a>
+<h4><em>Z Option (read cycle count file - d52 only)</em></h4>
+
+Jan Waclawek has added code to generate cycle counts for all three disassemblers.
+In addition, d52 can read customized cycle count files for 8052 derivatives.
+See the <a href="#zdirective">Z directive</a> for more information.
+
+Please read Jan's documentation in the 'cyclefiles' directory.
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>d52 -zfilename</td>
+</table>
+
+Many thanks to Jan for a great job!
+
+<br><br>
+<a href="#topofdoc">Back to top</a><br>
+
+<a name="directives"></a>
+<h4><em>Control File Directives</em></h4>
+<hr>
+
+Control directives tell the disassembler to treat specified areas
+of the code to be disassembled as something other than executable
+code. The user specifies control directives by editing (with any
+text editor) a control file with the same name as the file to be
+disassembled, but with a file extention of .ctl (eg: program.ctl
+to control the disassembly of the file program.hex or program.bin).
+A generic control file called 'generic.ctl' is provided to get the
+user started. Copy 'generic.ctl' to 'file.ctl' where 'file' is the
+name of the binary or Intel hex file to be disassembled, and modify
+as required based on the output of the disassembler. Then run the
+disassembler again to get a more readable disassembly of the code.
+<br><br>
+All directives consist of a character that specifies the type of data,
+followed by a hexadecimal number specifying the value or range of
+values of the data. In the case of a
+<a href="#ldirective">label</a>
+or
+<a href="#sdirective">symbol</a>
+directive, the hexadecimal number is followed by ascii text defining
+the label or symbol. See individual directives for examples. All
+directives must be in the first column of the line. Directives may be
+complete words, but only the first character is significant, ie:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>Label</td>
+      <td></td><td></td><td></td><td>0</td>
+      <td></td><td></td><td></td><td>reset</td>
+      <td></td><td></td><td></td><td></td><td></td>
+      <td></td><td></td><td></td><td></td><td>and</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>looney</td>
+      <td></td><td></td><td></td><td>0</td>
+      <td></td><td></td><td></td><td>reset</td></tr>
+</table>
+
+will both generate the label "reset" for address 0. Note that they
+are not case sensitive.
+<br><br>
+Numerical values must be in hexadecimal and may optionally be preceeded by
+"0x". For example, a hexadecimal number may be entered as "1234" or
+"0x1234". Either will be interpreted as the number 1234H.
+<br><br>
+Everything following a semi-colon (;) is a comment and will be
+ignored by the disassembler.
+<br><br>
+Label and symbol directives differ in that a label refers to an
+address and a symbol refers to any 8 or 16 bit immediate data.
+Therefore an opcode such as
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>mov</td>
+      <td></td><td></td><td></td><td></td><td></td><td>r2,#data</td></tr>
+</table>
+
+will cause the disassembler to search only the symbol table for a
+matching value whereas an opcode such as
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>mov</td>
+      <td></td><td></td><td></td><td></td><td></td><td>dptr,#data</td>
+  </tr>
+</table>
+
+will cause the disassembler to search the label table first, and
+if no matching value is found, to then search the symbol table.
+
+<br><br>
+Symbols apply only to immediate data. To specify a symbol for an 8052
+data memory location, use the
+<a href="#rdirective">R directive</a>
+, or to force name substitution for an operand at a given address, use the
+<a href="#xdirective">X directive</a>.
+<br><br>
+
+Single values are specified by entering just the value; ranges of
+values are specified by a start and stop address separated by a dash
+(-), or by a start address and count separated by a plus (+), ie:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>t 1000</td>
+      <td></td><td></td><td></td><td></td><td></td><td></td>
+      <td>the data at address 1000H is ascii text.</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>t 1000-1010</td>
+      <td></td><td></td><td></td><td></td><td></td><td></td>
+      <td>the data from address 1000H to (and including)
+          address 1010H is ascii text.</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>t 1000+6</td>
+      <td></td><td></td><td></td><td></td><td></td><td></td>
+      <td>ascii text starting at 1000H for 6 bytes.</td></tr>
+</table>
+
+Directives are processed in the order in which they are read from
+the control file. Specifying an area as ascii data and then later
+specifying it as data to be ignored (uninitialized data) will cause
+that area to not be disassembled at all. Care must be taken in
+specifying areas in the control file.
+
+
+<a name="adirective"></a>
+<h4><em>A Directive (address data)</em></h4>
+
+Specifies that the address contains a word value corresponding
+to an address for which a label should be generated. For example,
+a vector table may be located at address 0x1000 containing four
+entries. The user can modify the control file by adding the
+following entry:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>a 1000-1007</td></tr>
+</table>
+
+This will cause the disassembler to generate the following
+output lines:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>dw</td>
+      <td></td><td></td><td></td><td></td><td>vec1</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>dw</td>
+      <td></td><td></td><td></td><td></td><td>vec2</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>dw</td>
+      <td></td><td></td><td></td><td></td><td>vec3</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>dw</td>
+      <td></td><td></td><td></td><td></td><td>vec4</td></tr>
+</table>
+
+assuming that the control file also contains entries for the
+values found at those addresses to generate the labels vec1
+through vec4. The addresses referenced will be flagged so
+that labels will be generated in the output file at those
+addresses.
+
+<a name="bdirective"></a>
+<h4><em>B Directive (byte binary data)</em></h4>
+
+Specifies that the data is to be interpreted as 8 bit binary
+data. For example:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>b 1000-1007</td></tr>
+</table>
+
+tells the disassembler that the data from address 1000H to 1007H
+should generate the line:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>db</td>
+      <td></td><td></td><td></td><td></td><td>0,1,2,3,4,5,6,7</td></tr>
+</table>
+
+assuming that the data at address 1000H and up is 00H, 01H, etc.
+
+<a name="cdirective"></a>
+<h4><em>C Directive (code data)</em></h4>
+
+Forces the disassembler to interpret the data as executable code.
+This may be necessary because the disassembler skips over strings
+of 00H or ffH bytes that occur since they are unlikely to be real
+code. However, sometimes programmers insert several NOPs for timing
+purposes.
+
+<a name="ddirective"></a>
+<h4><em>D Directive (define data type (label or symbol))</em></h4>
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>d address [0 or label]</td>
+      <td></td><td></td><td></td><td></td><td>search label table only</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>d address [1 or symbol]</td>
+      <td></td><td></td><td></td><td></td><td>search symbol table only</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>d address [2 or none]</td>
+      <td></td><td></td><td></td><td></td><td>don't search either table</td></tr>
+</table>
+
+Forces the disassembler to search only the label or symbol table. This
+allows you to specify a label and a symbol for the same value. For example:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>mov dptr,#1234</td>
+  </tr>
+</table>
+
+would normally search only the label table assuming that the data refers
+to a code address. If the data is really a constant with the same value as
+a label, then
+
+<table summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>d 1 address</td></tr>
+</table>
+
+will force the disassmbler to look only in the symbol table for the string
+that represents the value of the data. The address is the address of the
+opcode, not the code location of the data operand.
+<br><br>
+Note that the last parameter can be either a number (0, 1, or 2) or a word
+(label, symbol, none). If the last parameter is a word, only the first
+character is checked for L, S, or N, and is not case sensitive.
+
+<a name="fdirective"></a>
+<h4><em>F Directive (SFR label definition)</em></h4>
+
+Causes reference to an SFR (special function register) to
+generate a label for the specified SFR address. This is useful
+for naming SFR's for non-standard members of the 8052 family.
+For example, suppose that some manufacturer designs a new 8052
+variant and decides to use address efH as a new special function
+register called 'NEWREG'. Then by adding:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>f ef newreg</td></tr>
+</table>
+
+to the control file, D52 will disassemble the opcodes f5 ef as:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>mov</td>
+      <td></td><td></td><td></td><td></td><td>newreg,a</td></tr>
+</table>
+
+instead of:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>mov</td>
+      <td></td><td></td><td></td><td></td><td>0efh,a</td></tr>
+</table>
+
+SFR label names are limited to fifteen characters.
+
+<a name="idirective"></a>
+<h4><em>I Directive (ignore data)</em></h4>
+
+Tells the disassembler to ignore a range of addresses that may be
+initialized by the input file. This is useful when the input file
+is a binary file generated by an eprom programmer that dumps the
+entire eprom space. The valid data from a 4K eprom might only be,
+say, 3K in length. By adding
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>i c00-fff</td></tr>
+</table>
+
+to the control file, you tell the disassembler to not disassemble
+the data from address 0c00H to 0fffH.
+
+<a name="kdirective"></a>
+<h4><em>K Directive (SFR bit definition)</em></h4>
+
+As with the
+<a href="#fdirective">F directive</a>
+, you can give a name to a new SFR bit. If a new variant of the 8052
+family adds a new interrupt, for instance, its enable bit in the IE
+register might be bit 6. By adding:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>k ae newint</td>
+      <td></td><td></td><td></td><td></td><td></td><td></td><td></td><td>(ae is the address of IE.6)</td></tr>
+</table>
+
+you define bit 6 of the interrupt enable register to be 'ie.newint'.
+Like SFR label names, SFR bit names are limited to fifteen characters.
+
+<a name="ldirective"></a>
+<h4><em>L Directive (label definition)</em></h4>
+
+Defines a label to the disassembler. Labels are generated in the
+output disassembly file whenever a reference to the address is
+found and the label exists in the label table. Suppose that
+address 0000H contains the code 01 43 (ajmp 0043H). Then the entry
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>l 43 start</td></tr>
+</table>
+
+in the control file will cause D52 to disassemble this code as:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>ajmp</td>
+      <td></td><td></td><td></td><td></td><td>start</td></tr>
+</table>
+
+rather than:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>ajmp</td>
+      <td></td><td></td><td></td><td></td><td>X0043</td></tr>
+</table>
+
+The code beginning at address 43H will then have the label
+'start' in the label field rather than the label 'X0043'. See
+the entry for the
+<a href="#sdirective">S directive</a>
+for an explanation of the difference between labels and symbols.
+
+<a name="mdirective"></a>
+<h4><em>M Directive (bit addressable memory label)</em></h4>
+
+Similar to the
+<a href="#kdirective">K directive</a>
+, the M directive gives a name to a bit addressable memory location. Example:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>m 12 bitflag</td>
+      <td></td><td></td><td></td><td></td><td>(12h is the bit address of 22h.2)</td></tr>
+</table>
+
+would cause the bytes d2 12 to be disassembled as
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>setb</td>
+      <td></td><td></td><td></td><td></td><td></td><td>bitflag</td></tr>
+</table>
+
+instead of
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>setb</td>
+      <td></td><td></td><td></td><td></td><td></td><td>22h.2</td></tr>
+</table>
+
+As with the K directive, names are limited to fifteen characters.
+
+<a name="ndirective"></a>
+<h4><em>N Directive (suppress address label generation)</em></h4>
+
+The disassembler will generate labels for addresses that are referenced by code
+such as
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>mov</td>
+      <td></td><td></td><td></td><td></td><td></td><td>dptr,#6</td></tr>
+</table>
+
+If the operand represents a constant rather than an address, you can suppress
+the automatic generation of a label (X0006) for address 6h by entering
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>n 6</td>
+</table>
+
+in the control file. You'd want to make sure that address 6h isn't legitimately
+addressed by some other code before using this directive.
+
+<a name="odirective"></a>
+<h4><em>O Directive (add hexadecimal offset to addresses)</em></h4>
+
+This directive causes the disassembler to add a hexadecimal offset to the address
+of every location in the code file. See the <a href="#xoption">X option</a>
+for details. It will be overridden by any <a href="#xoption">X option</a>
+specified on the command line. If the <a href="#toption">T option</a> (trace and
+analyze code) is given on the command line, the O directive has no effect since
+any existing control file will be rewritten. In this case you must use the command
+line X option to specify an offset.
+
+<a name="pdirective"></a>
+<h4><em>P Directive (patch inline code)</em></h4>
+
+This directive is of dubious value, but has been added for anyone who might find
+it useful. The P directive is similar to the
+<a href="#commentdirective">comment directive</a>
+except that the user supplied string is patched into the output stream as
+<i>code</i>, not as a comment. You could, for instance, patch in a macro
+definition or an include statement. Patching in executable code is not a real
+good idea.
+
+<a name="rdirective"></a>
+<h4><em>R Directive (register definition)</em></h4>
+
+This directive specifies a name for an 8052 register. Direct
+accesses to registers will normally be disassembled as:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>mov</td>
+       <td></td><td></td><td></td><td></td><td></td><td>rb2r5,a</td></tr>
+</table>
+
+in the case of register 5 of register bank 2. If the user
+determines that register 5 of bank 2 is being used as a loop
+counter, for example, he can give it the name loop by adding:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>r 15 loop</td></tr>
+</table>
+
+to the control file, and the above code will be disassembled as:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>mov
+      <td></td><td></td><td></td><td></td><td></td><td>loop,a</td></tr>
+</table>
+
+The R directive can assign a name to any internal memory location
+below the SFR address space.
+
+<a name="sdirective"></a>
+<h4><em>S Directive (symbol definition)</em></h4>
+
+Defines a symbol to the disassembler. Symbols are output to the
+disassembly file whenever the value is encountered in the input
+file and the symbol exists in the symbol table. The user can
+specify a symbol for a value by a line such as:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>s 20 space</td></tr>
+</table>
+
+Code which uses this value, such as:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>mov</td>
+      <td></td><td></td><td></td><td></td><td>a,#20h</td>
+  </tr>
+</table>
+
+will then be disassembled as:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>mov</td>
+      <td></td><td></td><td></td><td></td><td>a,#space</td>
+  </tr>
+</table>
+
+Labels and symbols differ in that a label applies to an address,
+whereas a symbol applies to any 8 or 16 bit immediate data. For
+code which can only refer to values, such as
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>mov</td>
+      <td></td><td></td><td></td><td></td><td>a,#20h</td>
+  </tr>
+</table>
+
+only the symbol table will be searched for a matching value. For
+code which could refer to either an address or a value, such as:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>mov</td>
+      <td></td><td></td><td></td><td></td><td>dptr,#1234h</td>
+  </tr>
+</table>
+
+the label table will be searched first, and only if no matching
+value is found will the symbol table then be searched. This search
+behavior can be modified by use of the
+<a href="#ddirective">d directive</a> or the
+<a href="#xdirective">x directive</a>.
+
+<a name="tdirective"></a>
+<h4><em>T Directive (text [ascii] data)</em></h4>
+
+Forces the data in the range specified to be disassembled as
+text (ascii data). Thus the code: 48 69 20 74 68 65 72 65 at
+address 1000H will be disassembled as:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>db</td>
+      <td></td><td></td><td></td><td></td><td></td><td>'Hi there'</td>
+      <td></td><td></td><td></td><td></td><td></td><td>or</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>ascii</td>
+      <td></td><td></td><td></td><td></td><td></td><td>'Hi there'</td>
+      <td></td><td></td><td></td><td></td><td></td><td>(command line option A used)</td></tr>
+</table>
+
+by putting the line:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>t 1000-1007</td></tr>
+</table>
+
+in the control file. Otherwise it would be interpreted as:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>orl</td>
+      <td></td><td></td><td></td><td></td><td></td><td>a,r0</td>
+      <td></td><td></td><td></td><td></td><td></td><td>; 1000</td>
+      <td></td><td></td><td>48</td>
+      <td></td><td></td><td>H</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>xrl</td>
+      <td></td><td></td><td></td><td></td><td></td><td>a,r1</td>
+      <td></td><td></td><td></td><td></td><td></td><td>; 1001</td>
+      <td></td><td></td><td>69</td>
+      <td></td><td></td><td>i</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>jb</td>
+      <td></td><td></td><td></td><td></td><td></td><td>2eh.4,X106d</td>
+      <td></td><td></td><td></td><td></td><td></td><td>; 1002</td>
+      <td></td><td></td><td>20 74 68</td>
+      <td></td><td></td><td>th</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>xrl</td>
+      <td></td><td></td><td></td><td></td><td></td><td>a,72h</td>
+      <td></td><td></td><td></td><td></td><td></td><td>; 1005</td>
+      <td></td><td></td><td>65 72</td>
+      <td></td><td></td><td>er</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>xrl</td>
+      <td></td><td></td><td></td><td></td><td></td><td>a,t3</td>
+      <td></td><td></td><td></td><td></td><td></td><td>; 1007</td>
+      <td></td><td></td><td>65 ff</td>
+      <td></td><td></td><td>e.</td></tr>
+</table>
+
+which is unlikely to be what was intended by the original
+programmer. Data specified by this directive is not checked
+to verify that it really is ascii data--be careful.
+
+<a name="wdirective"></a>
+<h4><em>W Directive (word binary data)</em></h4>
+
+Specifies that the data is to be interpreted as 16 bit binary
+data. For example:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>w 1000-1007</td></tr>
+</table>
+
+tells the disassembler that the data from address 1000H to 1007H
+should generate the lines:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>dw</td>
+      <td></td><td></td><td></td><td></td><td>0</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>dw
+      <td></td><td></td><td></td><td></td><td>1</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>dw
+      <td></td><td></td><td></td><td></td><td>2</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>dw
+      <td></td><td></td><td></td><td></td><td>3</td></tr>
+</table>
+
+assuming that the data at address 1000H and up is 00H, 00H,
+00H, 01H, 00H, 02H, etc. This differs from the A (address)
+directive in that the
+<a href="#adirective">A directive</a>
+also causes a reference to be made to the indirect address.
+In other words, if the data at address 1000H is 1234H, the A
+directive will cause a label (X1234) to be put in the output
+file at address 1234H, whereas the W directive will not.
+
+<a name="xdirective"></a>
+<h4><em>X Directive (specify name for operand data)</em></h4>
+
+Specify a name for an operand at a particular address. This is similar
+to the
+<a href="#sdirective">S directive</a>
+except that it applies only to the given address. For example, if the
+<em>symbol</em> 'CR' is defined as 0dh, every instance of 0dh as an operand will
+have the symbol 'CR' substituted. It may be, however, that the value
+0dh has a different meaning when used as an operand for a particular
+instruction. The X directive allows you to modify the interpretation
+of an operand at specific operand locations. Why not then use the X
+directive exclusively? Because that would force you to place an X
+directive in the control file for <em>every</em> instance in which
+that value appeared as an operand. The S directive, defined only once
+for an operand value, will substitute the symbol text for <em>every</em>
+occurrance of that operand value unless overridden by the X directive.
+Note that the address defined in the X directive is the address of the
+operand, not the address of the instruction. For example:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>X 102 loopinit</td></tr>
+</table>
+
+forces substitution of the text 'loopinit' for the operand located at
+address 102h. Therefore an instruction that should be interpreted as
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>mov</td>
+      <td></td><td></td><td>r0,#loopinit</td></tr>
+</table>
+
+will not be disassembled as
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>mov</td>
+      <td></td><td></td><td>r0,#CR</td></tr>
+</table>
+
+if the control file contains the above x directive, and also contains an
+<a href="#sdirective">S directive</a>
+defining 0dh as 'CR', and the value of the operand for the mov
+instruction happens to also be 0dh.
+
+<a name="ydirective"></a>
+<h4><em>Y Directive (specify name for operand data but suppress EQU generation)</em></h4>
+
+This is similar to the X directive except that the disassembler will not
+generate an EQU statement for the operand value in the output file. This should
+be used when you want to specify a name for an operand that is an assembler
+pseudo-op such as LOW() or HIGH().
+
+<a name="zdirective"></a>
+<h4><em>Z Directive (specify code for which to generate cycle count information)</em></h4>
+
+Specify addresses for which cycle count information will be added in the
+disassembly file. Also see the <a href="#zoption">Z option</a>.
+<br>
+Please read Jan's documentation in the 'cyclefiles' directory.
+
+<a name="commentdirective"></a>
+<h4><em># Directive (header comment string)</em></h4>
+
+Defines a comment string to be output prior to disassembly at
+the specified address. For example:<br><br>
+
+<!-- This is one time we DO want to use <pre> -->
+
+<pre>
+        # 95
+        # 95 Start of initialization
+        # 95
+</pre>
+<br><br>
+in the ctl file would cause the output<br><br>
+<pre>
+        ;
+        ; Start of initialization
+        ;
+                clr  ea           ;0095     c2 af     B/
+</pre>
+<br><br>
+assuming that the code 'c2 af' was located at address 0x95.
+Since ASCII strings consume prodigious amounts of memory, it is
+wise to use this directive sparingly. It is, however, useful for
+marking blocks of code that have been identified in previous
+runs of D52.
+
+<a name="icommentdirective"></a>
+<h4><em>! Directive (inline comment string)</em></h4>
+
+Defines a comment string to be output after disassembly at
+the specified address. For example:<br><br>
+
+<!-- This is one time we DO want to use <pre> -->
+
+<pre>
+        ! 95 Start of initialization
+</pre>
+<br><br>
+in the ctl file would cause the output<br><br>
+<pre>
+                clr  ea           ;0095     c2 af     B/    ; Start of initialization
+</pre>
+<br><br>
+for the above example. Note that inline comments are only available for code
+and word data, and will do nothing if the data at the specified address is defined
+as data other than code or word data (ascii text, for example).
+
+<br><br>
+<a href="#topofdoc">Back to top</a><br>
+
+<a name="symnote"></a>
+<h4><em>A Note on Symbols, Labels and Names</em></h4>
+<hr>
+An example will best explain the difference between labels, symbols, operand
+names and register names. Labels refer to program code locations, symbols
+refer to immediate operands, register names and operand names refer to data
+memory locations.
+<br><br>
+
+<em>Given the hex or binary file produced from the follow source code:</em>
+<br><br>
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>org</td>
+      <td></td><td></td><td>30h</td></tr>
+  <tr><td>main</td><td></td><td></td><td></td><td></td><td>mov</td>
+      <td></td><td></td><td>a,30h</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>mov</td>
+      <td></td><td></td><td>30h,r0</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>mov</td>
+      <td></td><td></td><td>r1,#30h</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>sjmp</td>
+      <td></td><td></td><td>main</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>end</td></tr>
+</table>
+
+<br>
+<em>and this control file:</em>
+<br><br>
+
+<table cellspacing=5 summary="">
+  <tr><td>l 30</td><td>main</td><td></td><td>; label for code address</td></tr>
+  <tr><td>x 33</td><td>thirty</td><td></td><td>; name for operand at address 33h</td></tr>
+  <tr><td>s 30</td><td>alsothirty</td><td></td><td>; symbol for immediate operand</td></tr>
+  <tr><td>r 30</td><td>counter</td><td></td><td>; name for data memory address (register) at 30h</td></tr>
+</table>
+<br><br>
+
+<em>D52 will produce the following output:</em>
+<br><br>
+
+<table cellspacing=5 summary="">
+  <tr><td>;</td></tr>
+  <tr><td></td><td></td><td>org</td><td></td><td></td><td></td><td>30h</td></tr>
+  <tr><td>;</td></tr>
+  <tr><td>main:</td><td></td><td>mov</td><td></td><td>a,counter</td><td></td><td>; 0030   e5 30</td><td></td><td>e0</td></tr>
+  <tr><td></td><td></td><td>mov</td><td></td><td>thirty,r0</td><td></td><td>; 0032   88 30</td><td></td><td>.0</td></tr>
+  <tr><td></td><td></td><td>mov</td><td></td><td>r1,#alsothirty</td><td></td><td>; 0034   79 30</td><td></td><td>y0</td></tr>
+  <tr><td></td><td></td><td>sjmp</td><td></td><td>main</td><td></td><td>; 0036   80 f8</td><td></td><td>.x</td></tr>
+  <tr><td>;</td></tr>
+  <tr><td>counter</td><td></td><td>equ</td><td></td><td>30h</td></tr>
+  <tr><td>alsothirty</td><td></td><td>equ</td><td></td><td>30h</td></tr>
+  <tr><td>thirty</td><td></td><td>equ</td><td></td><td>30h</td></tr>
+  <tr><td>;</td></tr>
+  <tr><td></td><td></td><td>end</td></tr>
+  <tr><td>;</td></tr>
+</table>
+<br><br>
+
+Note that the label, symbol, register name, and operand name all have
+the same value: 30h. But the operand name directive (
+<a href="#xdirective">x directive</a>) in
+the control file specifies the <em>address</em> of the operand (in
+this case 33h), and the other three control file directives refer to
+the <em>value</em> of the operand. The x directive allows you to use
+a different name for the same value (unlike a symbol), so that, for
+example, an operand value of 0dh in one place can be disassembled with
+the name 'CR' and in another place as, say, 'loop_init_count'.
+
+<br><br>
+
+<a name="outfile"></a>
+<h4><em>Format of Output File</em></h4>
+<hr>
+
+The output file for D52 (extention '.d52') contains 8052 instructions
+and pseudo ops in a format that should be acceptable to any 8052
+cross assembler. When assembled, the source file should produce an Intel
+hex file or binary file that is identical to the original. Identical, in
+this case, means that the code is the same, not that it necessarily has
+the same format. The number of bytes in each line of the hex file may
+differ from the original depending on whether the original was produced
+by an assembler or was read from an eprom.
+
+Each output line is in the following format:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>LABEL:</td>
+      <td></td><td></td><td>OPCODE</td>
+      <td></td><td></td><td>OPERANDS</td>
+      <td></td><td></td><td>; COMMENT</td></tr>
+</table>
+
+The label field will be generated only if the address of the code
+is referenced by some other code (a call, for instance), or if the
+user has specified a label for that address in the control file.
+The comment field is only generated if the user specifies the D
+option on the command line. Comments begin with a semicolon and are
+followed by the hexadecimal address of the instruction, the hex
+value of the byte(s) for the instruction, and finally by the ascii
+representation of the instruction byte(s). For example:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>X004f:</td>
+      <td></td><td></td><td></td><td>orl</td>
+      <td></td><td></td><td></td><td>p3,#0ffh</td>
+      <td></td><td></td><td></td><td>; 004f</td>
+      <td></td><td></td><td></td><td>43 b0 ff</td>
+      <td></td><td></td><td></td><td>C0.</td></tr>
+  <tr><td></td><td></td><td></td><td></td><td></td><td>label</td>
+      <td></td><td></td><td></td><td>opcode</td>
+      <td></td><td></td><td></td><td>operands</td>
+      <td></td><td></td><td></td><td>comment</td></tr>
+</table>
+
+Several things should be noted in this example. The label is 'X'
+followed by the address of the instruction in four hex digits.
+This type of label is created by the disassembler when some other
+code references the address. If the user specifies a label name for
+the address in the control file ('what' for example), the generated
+code becomes:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>what:</td>
+      <td></td><td></td><td></td><td>orl</td>
+      <td></td><td></td><td></td><td>p3,#0ffh</td>
+      <td></td><td></td><td></td><td>; 004f</td>
+      <td></td><td></td><td></td><td>43 b0 ff</td>
+      <td></td><td></td><td></td><td>C0.</td></tr>
+</table>
+
+If the user were to specify the symbol 'ones' for the value 0ffH,
+the output would then become:
+
+<table cellspacing=5 summary="">
+  <tr><td></td><td></td><td></td><td></td><td></td><td>what:</td>
+      <td></td><td></td><td></td><td>orl</td>
+      <td></td><td></td><td></td><td>p3,#ones</td>
+      <td></td><td></td><td></td><td>; 004f</td>
+      <td></td><td></td><td></td><td>43 b0 ff</td>
+      <td></td><td></td><td></td><td>C0.</td></tr>
+</table>
+
+Also note the ascii representation of the instruction bytes. Bit
+7 is forced to zero so that ascii with the high bit set can be
+viewed (b0H in the example becomes 30H, which is ascii '0'). Any
+code which is not printable ascii (a control code, for example)
+is output as a period. This is the case for the byte 0ffH above.
+<br><br>
+The comment field starts at a different position in the output
+line depending on the type of data in the input file. For normal
+executable code, the comment field starts in column 32; for hex
+data it starts at column 49, and for ascii data it starts in
+column 56. For many programs, this makes for a more readable
+source file, but if there is a mix of data types in a short range
+of addresses, this can lead to some strange looking formatting.
+The user may want to correct this with a text editor in the final
+disassembly before modification and reassembly.
+
+<br><br>
+<a href="#topofdoc">Back to top</a><br>
+<br><br>
+
+<a name="summary"></a>
+<h4><em>Summary</em></h4>
+<hr>
+
+D52 is distributed under the GNU General Public License. See the file COPYING
+for details. D52 versions 3.1 and higher are a continuation of the earlier
+disassembler named D51.
+<br><br>
+D52 allows the user to specify how code should be disassembled via a control
+file that defines given areas of the code as ascii text, binary data or other
+types of non-executable code. By an iterative process of disassembly, control
+file modification, and further disassembly, the user can obtain a very readable
+source file that can then be modified and re-assembled by a cross assembler.
+Several public domain cross assemblers are available.
+<br><br>
+I've encountered several problems when reassembling the output of D52.
+Almost all are due to the cross assembler not recognizing SFRs of some
+of the newer or more exotic 8052 variants. The D52 tables include
+names for all SFRs that I'm aware of as of May 1995 (there are likely
+some that I'm not aware of). Such errors might be corrected just by
+defining a symbol for the SFR in the control file (see the
+<a href="#fdirective">F directive</a>
+), but this depends on whether your cross assembler will accept it as a
+valid operand. If all else fails, replace the offending instruction
+with a 'db' pseudo op and put the mnemonic and operand in a comment.
+A similar problem is the assembler not being able to handle a bit
+addressable SFR address; the only solution I see to this is to use a
+'db' pseudo op. All other problems I've seen (not many) have been due
+to disassembling data as code; this is easily corrected by modifying
+the control file to specify the correct data type.
+<br><br>
+
+Many thanks to numerous beta testers who have made invaluable
+suggestions for improvement and found more bugs than I care to think about.
+Also thanks to all the users who have, over the years, also made significant
+contributions to the betterment of D52. Any remaining deficiencies are solely
+my fault.
+
+<br><br>
+
+<h4><em>Summary of command line options and control file directives</em></h4>
+Command line options:
+<br>
+<ul>
+<li>A - Change db/defb pseudo op to 'ascii' macro for text
+<li>B - Force read of binary file (.bin extention)
+<li>D - Add address and data info in comment field
+<li>H - Force read of Intel hex file (.hex extention)
+<li>I - Add statement to include file 'sfr52.inc' in output file
+<li>K - Disassemble for older Keil A51 assembler
+<li>N - Output C style hexadecimal operands
+<li>P - Add a dot '.' to beginning of pseudo operation codes
+<li>S - Change db and dw pseudo ops to defb and defw
+<li>T - Trace and analyze code before disassembly
+<li>U - Output labels, mnemonics, etc in upper case
+<li>X - Add hexadecimal offset to all program locations
+<li>Z - Read cycle count file (d52 only)
+</ul>
+Control file directives:
+<br>
+<ul>
+<li>A - Specifies that words in program space are addresses
+<li>B - Data is 8 bit binary
+<li>C - Program space is executable code
+<li>D - Force search of only label table or only symbol table for operand name
+<li>F - Specify SFR label
+<li>I - Ignore data (uninitialize program space)
+<li>K - Specify label for SFR bit
+<li>L - Define label
+<li>M - Specify label for bit addressable memory
+<li>N - Suppress generation of address label
+<li>O - Add hexadecimal offset to all program locations
+<li>P - Patch inline code
+<li>R - Define register name
+<li>S - Define symbol
+<li>T - Specify ascii text
+<li>W - Data is 16 bit binary
+<li>X - Specify name for a specific operand
+<li>Y - Specify name for a specific operand but do not generate an EQU statement
+<li>Z - Specify addresses for which to generate cycle count information
+<li># - Define a header comment string
+<li>! - Define an inline comment string
+</ul>
+<br><br>
+<a href="#topofdoc">Back to top</a><br>
+
+<a name="regmaps"></a>
+<h4><em>8052 Register Maps</em></h4>
+<hr>
+
+Addresses of 8052 registers:
+<table border summary="">
+  <tr><th>Bank</th><th>R0</th><th>R1</th><th>R2</th><th>R3</th><th>R4</th><th>R5</th><th>R6</th><th>R7</th></tr>
+  <tr><td>0</td><td>00</td><td>01</td><td>02</td><td>03</td><td>04</td><td>05</td><td>06</td><td>07</td></tr>
+  <tr><td>1</td><td>08</td><td>09</td><td>0A</td><td>0B</td><td>0C</td><td>0D</td><td>0E</td><td>0F</td></tr>
+  <tr><td>2</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td></tr>
+  <tr><td>3</td><td>18</td><td>19</td><td>1A</td><td>1B</td><td>1C</td><td>1D</td><td>1E</td><td>1F</td></tr>
+</table>
+
+<br><br>
+Addresses of 8052 Special Function Registers:
+<table border summary="">
+  <tr><th>Address</th><th>Symbol</th><th>Name</th></tr>
+  <tr><td> 80 </td><td> P0   </td><td>  Port 0</td></tr>
+  <tr><td> 81 </td><td> SP   </td><td>  Stack Pointer</td></tr>
+  <tr><td> 82 </td><td> DPL  </td><td>  Data Pointer (low byte)</td></tr>
+  <tr><td> 83 </td><td> DPH  </td><td>  Data Pointer (high byte)</td></tr>
+  <tr><td> 87 </td><td> PCON </td><td>  Power Control</td></tr>
+  <tr><td> 88 </td><td> TCON </td><td>  Timer/Counter Control</td></tr>
+  <tr><td> 89 </td><td> TMOD </td><td>  Timer/Counter Mode</td></tr>
+  <tr><td> 8A </td><td> TL0  </td><td>  Timer/Counter 0 (low byte)</td></tr>
+  <tr><td> 8B </td><td> TL1  </td><td>  Timer/Counter 1 (low byte)</td></tr>
+  <tr><td> 8C </td><td> TH0  </td><td>  Timer/Counter 0 (high byte)</td></tr>
+  <tr><td> 8D </td><td> TH1  </td><td>  Timer/Counter 1 (high byte)</td></tr>
+  <tr><td> 90 </td><td> P1   </td><td>  Port 1</td></tr>
+  <tr><td> 98 </td><td> SCON </td><td>  Serial Port Control</td></tr>
+  <tr><td> 99 </td><td> SBUF </td><td>  Serial Data Buffer</td></tr>
+  <tr><td> A0 </td><td> P2   </td><td>  Port 2</td></tr>
+  <tr><td> A8 </td><td> IE   </td><td>  Interrupt Enable</td></tr>
+  <tr><td> B0 </td><td> P3   </td><td>  Port 3</td></tr>
+  <tr><td> B8 </td><td> IP   </td><td>  Interrupt Priority</td></tr>
+  <tr><td> D0 </td><td> PSW  </td><td>  Program Status Word</td></tr>
+  <tr><td> E0 </td><td> ACC  </td><td>  Accumulator</td></tr>
+  <tr><td> F0 </td><td> B    </td><td>  B Register</td></tr>
+</table>
+<br><br>
+<a href="#topofdoc">Back to top</a><br>
+
+<a name="bsfr"></a>
+<h4><em>Bit Addressable Special Function Registers</em></h4>
+
+<table border summary="">
+  <tr><th>Address</th><th>Symbol</th><th>Bit name</th><th>Function</th></tr>
+  <tr><td> 80-87 </td><td> P0.0-7  </td><td>        </td><td>Port 0</td></tr>
+  <tr><td> 88    </td><td> IT0     </td><td> TCON.0 </td><td>External Interrupt 0 Type Control</td></tr>
+  <tr><td> 89    </td><td> IE0     </td><td> TCON.1 </td><td>External Interrupt 0 Edge Control</td></tr>
+  <tr><td> 8A    </td><td> IT1     </td><td> TCON.2 </td><td>External Interrupt 1 Type Control</td></tr>
+  <tr><td> 8B    </td><td> IE1     </td><td> TCON.3 </td><td>External Interrupt 1 Edge Control</td></tr>
+  <tr><td> 8C    </td><td> TR0     </td><td> TCON.4 </td><td>Timer 0 Run Control</td></tr>
+  <tr><td> 8D    </td><td> TF0     </td><td> TCON.5 </td><td>Timer 0 Overflow Flag</td></tr>
+  <tr><td> 8E    </td><td> TR1     </td><td> TCON.6 </td><td>Timer 1 Run Control</td></tr>
+  <tr><td> 8F    </td><td> TF1     </td><td> TCON.7 </td><td>Timer 1 Overflow Flag</td></tr>
+  <tr><td> 90-97 </td><td> P1.0-7  </td><td>        </td><td>Port 1</td></tr>
+  <tr><td> 98    </td><td> RI      </td><td> SCON.0 </td><td>Serial Receive Interrupt Flag</td></tr>
+  <tr><td> 99    </td><td> TI      </td><td> SCON.1 </td><td>Serial Transmit Interrupt Flag</td></tr>
+  <tr><td> 9A    </td><td> RB8     </td><td> SCON.2 </td><td>Serial Receive Bit 8</td></tr>
+  <tr><td> 9B    </td><td> TB8     </td><td> SCON.3 </td><td>Serial Transmit Bit 8</td></tr>
+  <tr><td> 9C    </td><td> REN     </td><td> SCON.4 </td><td>Serial Receive Enable</td></tr>
+  <tr><td> 9D    </td><td> SM2     </td><td> SCON.5 </td><td>Serial Port Mode Specifier</td></tr>
+  <tr><td> 9E    </td><td> SM1     </td><td> SCON.6 </td><td>Serial Port Mode Specifier</td></tr>
+  <tr><td> 9F    </td><td> SM0     </td><td> SCON.7 </td><td>Serial Port Mode Specifier</td></tr>
+  <tr><td> A0-A7 </td><td> P2.0-7  </td><td>        </td><td>Port 2</td></tr>
+  <tr><td> A8    </td><td> EX0     </td><td> IE.0   </td><td>Enable External Interrupt 0</td></tr>
+  <tr><td> A9    </td><td> ET0     </td><td> IE.1   </td><td>Enable Timer 0 Interrupt</td></tr>
+  <tr><td> AA    </td><td> EX1     </td><td> IE.2   </td><td>Enable External Interrupt 1</td></tr>
+  <tr><td> AB    </td><td> ET1     </td><td> IE.3   </td><td>Enable Timer 1 Interrupt</td></tr>
+  <tr><td> AC    </td><td> ES      </td><td> IE.4   </td><td>Enable Serial Port Interrupt</td></tr>
+  <tr><td> AF    </td><td> EA      </td><td> IE.7   </td><td>Enable Interrupts</td></tr>
+  <tr><td> B0-B7 </td><td> P3.0-7  </td><td>        </td><td>Port 3</td></tr>
+  <tr><td> B8    </td><td> PX0     </td><td> IP.0   </td><td>External Interrupt 0 Priority</td></tr>
+  <tr><td> B9    </td><td> PT0     </td><td> IP.1   </td><td>Timer 0 Interrupt Priority</td></tr>
+  <tr><td> BA    </td><td> PX1     </td><td> IP.2   </td><td>External Interrupt 1 Priority</td></tr>
+  <tr><td> BB    </td><td> PT1     </td><td> IP.3   </td><td>Timer 1 Interrupt Priority</td></tr>
+  <tr><td> BC    </td><td> PS      </td><td> IP.4   </td><td>Serial Port Interrupt Priority</td></tr>
+  <tr><td> D0    </td><td> P       </td><td> PSW.0  </td><td>Parity</td></tr>
+  <tr><td> D2    </td><td> OV      </td><td> PSW.2  </td><td>Overflow Flag</td></tr>
+  <tr><td> D3    </td><td> RS0     </td><td> PSW.3  </td><td>Register Bank Select Bit 0</td></tr>
+  <tr><td> D4    </td><td> RS1     </td><td> PSW.4  </td><td>Register Bank Select Bit 1</td></tr>
+  <tr><td> D5    </td><td> F0      </td><td> PSW.5  </td><td>Flag 0 (general purpose flag)</td></tr>
+  <tr><td> D6    </td><td> AC      </td><td> PSW.6  </td><td>Auxiliary Carry Flag</td></tr>
+  <tr><td> D7    </td><td> CY      </td><td> PSW.7  </td><td>Carry Flag</td></tr>
+  <tr><td> E0-E7 </td><td> ACC.0-7 </td><td>        </td><td>Accumulator Bits</td></tr>
+  <tr><td> F0-F7 </td><td> B.0-7   </td><td>        </td><td>B Register Bits</td></tr>
+</table>
+<br><br>
+<a href="#topofdoc">Back to top</a><br>
+
+<a name="bmem"></a>
+<h4><em>Addresses of Bit Addressable Memory Locations</em></h4>
+
+<table border summary="">
+  <tr><th>Address</th><th>Memory location</th></tr>
+  <tr><td>00-07</td><td>20.0 - 20.7</td></tr>
+  <tr><td>08-0F</td><td>21.0 - 21.7</td></tr>
+  <tr><td>10-17</td><td>22.0 - 22.7</td></tr>
+  <tr><td>18-1F</td><td>23.0 - 23.7</td></tr>
+  <tr><td>20-27</td><td>24.0 - 24.7</td></tr>
+  <tr><td>28-2F</td><td>25.0 - 25.7</td></tr>
+  <tr><td>30-37</td><td>26.0 - 26.7</td></tr>
+  <tr><td>38-3F</td><td>27.0 - 27.7</td></tr>
+  <tr><td>40-47</td><td>28.0 - 28.7</td></tr>
+  <tr><td>48-4F</td><td>29.0 - 29.7</td></tr>
+  <tr><td>50-57</td><td>2A.0 - 2A.7</td></tr>
+  <tr><td>58-5F</td><td>2B.0 - 2B.7</td></tr>
+  <tr><td>60-67</td><td>2C.0 - 2C.7</td></tr>
+  <tr><td>68-6F</td><td>2D.0 - 2D.7</td></tr>
+  <tr><td>70-77</td><td>2E.0 - 2E.7</td></tr>
+  <tr><td>78-7F</td><td>2F.0 - 2F.7</td></tr>
+</table>
+<br><br>
+
+<a href="#topofdoc">Back to top</a><br>
+<br><br><br><br>
+</body>
+</html>

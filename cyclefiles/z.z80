@@ -1,0 +1,62 @@
+;
+;  DZ80 V3.4.0 Z80 Disassembly of z.bin
+;  02/25/07 17:59
+;
+	org	0
+;
+	ld	b,23h		     ; 0000  06 23		.#
+X0002:	adc	a,c		;  4 ; 0002  89		.
+;
+; --- Cycle count 0002-0002 = 4 * 35x = 140
+;
+	djnz	X0002		;450 = 13 * 34x + 8 ; 0003  10 fd		.}
+;
+; --- Cycle count 0002-0004 = 590
+;
+	jr	X0029		; 12 ; 0005  18 22		."
+;
+	jr	z,X0019		;^12-; 0007  28 10		(.
+	jr	nc,X0015	;  7-; 0009  30 0a		0.
+	ind			; 16-; 000b  ed aa		m*
+;
+; --- Cycle count 0009-000b = 23 - not included to the parent cycle count.
+;
+; --- Cycle count 0007-000b = 12 - not included to the parent cycle count.
+;
+	indr			;373 = 21 * 17x + 16 ; 000d  ed ba		m:
+	ld	(ix+23h),a	; 19 ; 000f  dd 77 23	]w#
+	ld	(iy+55h),a	; 19 ; 0012  fd 77 55	}wU
+X0015:	res	2,h		;  8 ; 0015  cb 94		K.
+	res	2,(ix+12h)	; 23 ; 0017  dd cb 12 96	]K..
+	set	7,(iy+22h)	; 23 ; 001b  fd cb 22 fe	}K"~
+;
+; --- Cycle count 0002-001e = 1067
+;
+	nop			     ; 001f  00		.
+	ld	c,5		;  7 ; 0020  0e 05		..
+X0022:	adc	a,c		;  4 ; 0022  89		.
+	dec	c		;  4 ; 0023  0d		.
+;
+; --- Cycle count 0022-0023 = 8 * 5x = 40
+;
+	jr	nz,X0022	; 55 = 12 * 4x + 7 ; 0024  20 fc		 |
+;
+; --- Cycle count 0022-0024 = 95
+;
+	inc	c		;  4-; 0026  0c		.
+;
+; --- Cycle count 0026-0026 = 4 - not included to the parent cycle count.
+;
+; --- Cycle count 0020-ffff = 102
+;
+;	Miscellaneous equates
+;
+;  These are addresses referenced in the code but
+;  which are in the middle of a multibyte instruction
+;  or are addresses outside the initialized space
+;
+X0029	equ	29h
+;
+	end
+;
+

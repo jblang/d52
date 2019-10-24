@@ -1,0 +1,46 @@
+;
+;  D52 V3.4.0 8052 Disassembly of bench0.hex
+;  02/25/07 19:21
+;
+	org	0
+;
+	push	psw		;  2 
+	push	acc		;  2 
+	setb	rs0		;  2 
+	jbc	ti,X0011	;^ 4 
+X0009:	jbc	ri,X0028	;^ 4 
+X000c:	pop	acc		;  2 
+	pop	psw		;  2 
+	reti			;  5 
+;
+X0011:	mov	a,20h		;  2 
+	jz	X0009		;^ 3 
+	dec	20h		;  2 
+	add	a,#22h		;  2 
+	mov	r0,a		;  1 
+	mov	r2,p2		;  2 
+	clr	a		;  1 
+	addc	a,#0		;  2 
+	mov	p2,a		;  2 
+	movx	a,@r0		;  3 
+	mov	p2,r2		;  2 
+	mov	sbuf,a		;  2 
+	sjmp	X0009		;  3 
+;
+X0028:	mov	r1,21h		;  2 
+	mov	@r1,sbuf	;  2 
+	inc	r1		;  1 
+	cjne	r1,#2dh,X0032	;^ 4 
+	mov	r1,#28h		;  2 
+X0032:	mov	a,r1		;  1 
+	cjne	a,22h,X0038	;^ 4 
+	sjmp	X000c		;  3 
+;
+X0038:	mov	21h,a		;  2 
+	sjmp	X000c		;  3 
+;
+; --- Cycle count 0000-ffff = 74
+;
+	end
+;
+
