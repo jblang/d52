@@ -295,7 +295,9 @@ void pass2(void)
 
 						if (cptr == NULL)
 						{
-							if (!upperflag)
+							if (pgmflags[q] & PF_NOLABEL)
+								puthex(q);
+							else if (!upperflag)
 								fprintf(fp, "X%04x", q);
 							else
 								fprintf(fp, "X%04X", q);
@@ -568,7 +570,9 @@ void pass2(void)
 
 					if (cptr == NULL)
 					{
-						if (!upperflag)
+						if (pgmflags[q] & PF_NOLABEL)
+							puthex(q);
+						else if (!upperflag)
 							kcnt += fprintf(fp, "X%04x", q);
 						else
 							kcnt += fprintf(fp, "X%04X", q);
@@ -596,7 +600,13 @@ void pass2(void)
 
 					if (cptr == NULL)
 					{
-						if (!upperflag)
+						if (pgmflags[q] & PF_NOLABEL)
+						{
+							putc('(', fp);
+							kcnt++;
+							puthex(q);
+						}
+						else if (!upperflag)
 							kcnt += fprintf(fp, "(X%04x", q);
 						else
 							kcnt += fprintf(fp, "(X%04X", q);
@@ -638,7 +648,9 @@ void pass2(void)
 
 					if (cptr == NULL)
 					{
-						if (!upperflag)
+						if (pgmflags[q] & PF_NOLABEL)
+							puthex(q);
+						else if (!upperflag)
 							kcnt += fprintf(fp, "X%04x", q);
 						else
 							kcnt += fprintf(fp, "X%04X", q);
@@ -683,7 +695,15 @@ void pass2(void)
 
 										if (cptr == NULL)
 										{
-											if (!upperflag)
+											if (pgmflags[q] & PF_NOLABEL)
+											{
+												putc('(', fp);
+												kcnt++;
+												puthex(q);
+												putc(')', fp);
+												kcnt++;
+											}
+											else if (!upperflag)
 												kcnt += fprintf(fp, "(X%04x)", q);
 											else
 												kcnt += fprintf(fp, "(X%04X)", q);
@@ -710,7 +730,15 @@ void pass2(void)
 
 										if (cptr == NULL)
 										{
-											if (!upperflag)
+											if (pgmflags[q] & PF_NOLABEL)
+											{
+												putc('(', fp);
+												kcnt++;
+												puthex(q);
+												putc(')', fp);
+												kcnt++;
+											}
+											else if (!upperflag)
 												kcnt += fprintf(fp, "(X%04x)", q);
 											else
 												kcnt += fprintf(fp, "(X%04X)", q);
@@ -742,7 +770,15 @@ void pass2(void)
 
 										if (cptr == NULL)
 										{
-											if (!upperflag)
+											if (pgmflags[q] & PF_NOLABEL)
+											{
+												putc('(', fp);
+												kcnt++;
+												puthex(q);
+												putc(')', fp);
+												kcnt++;
+											}
+											else if (!upperflag)
 												kcnt += fprintf(fp, "(X%04x)", q);
 											else
 												kcnt += fprintf(fp, "(X%04X)", q);
@@ -774,7 +810,15 @@ void pass2(void)
 
 										if (cptr == NULL)
 										{
-											if (!upperflag)
+											if (pgmflags[q] & PF_NOLABEL)
+											{
+												putc('(', fp);
+												kcnt++;
+												puthex(q);
+												putc(')', fp);
+												kcnt++;
+											}
+											else if (!upperflag)
 												kcnt += fprintf(fp, "(X%04x)", q);
 											else
 												kcnt += fprintf(fp, "(X%04X)", q);
@@ -1161,7 +1205,15 @@ int doindex(int i, char index)
 
 					if (cptr == NULL)
 					{
-						if (!upperflag)
+						if (pgmflags[q] & PF_NOLABEL)
+						{
+							putc(upperflag?'I':'i', fp);
+							putc(index, fp);
+							putc(',', fp);
+							kcnt += 3;
+							puthex(q);
+						}
+						else if (!upperflag)
 							kcnt += fprintf(fp, "i%c,X%04x", index, q);
 						else
 							kcnt += fprintf(fp, "I%c,X%04X", index, q);
@@ -1188,7 +1240,14 @@ int doindex(int i, char index)
 
 					if (cptr == NULL)
 					{
-						if (!upperflag)
+						if (pgmflags[q] & PF_NOLABEL)
+						{
+							putc('(', fp);
+							kcnt++;
+							puthex(q);
+							kcnt += fprintf(fp, "),%c%c", upperflag?'I':'i', index);
+						}
+						else if (!upperflag)
 							kcnt += fprintf(fp, "(X%04x),i%c", q, index);
 						else
 							kcnt += fprintf(fp, "(X%04X),I%c", q, index);
@@ -1215,7 +1274,14 @@ int doindex(int i, char index)
 
 					if (cptr == NULL)
 					{
-						if (!upperflag)
+						if (pgmflags[q] & PF_NOLABEL)
+						{
+							kcnt += fprintf(fp, "%c%c,(", upperflag?'I':'i', index);
+							puthex(q);
+							putc(')', fp);
+							kcnt++;
+						}
+						else if (!upperflag)
 							kcnt += fprintf(fp, "i%c,(X%04x)", index, q);
 						else
 							kcnt += fprintf(fp, "I%c,(X%04X)", index, q);
